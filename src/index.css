@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Portfolio Design System */
+    --background: 237 77% 9%; /* #090A22 */
+    --foreground: 240 6% 96%; /* #F5F5F5 */
+
+    --surface: 239 46% 17%; /* #1A1C3D */
+    --surface-foreground: 240 6% 96%; /* #F5F5F5 */
+
+    --glass: 240 6% 96% / 0.1;
+    --glass-border: 240 6% 96% / 0.2;
+
+    --primary: 46 100% 80%; /* FFE5A1 */
+    --primary-foreground: 237 77% 9%;
+
+    --secondary: var(--surface);
+    --secondary-foreground: 240 6% 96%;
+
+    --muted: 260 24% 70%; /* #AAA4C3 */
+    --muted-foreground: 260 24% 70%;
+
+    --accent: var(--primary);
+    --accent-foreground: 237 77% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 240 6% 96%;
+
+    --border: 240 6% 96% / 0.1;
+    --input: var(--surface);
+    --ring: var(--primary);
+
+    --radius: 0.75rem;
+
+    /* Gradient definitions */
+    --gradient-accent: linear-gradient(135deg, hsl(46 100% 80%), hsl(35 71% 43%), hsl(46 100% 73%));
+    --gradient-glass: linear-gradient(135deg, hsl(240 6% 96% / 0.1), hsl(240 6% 96% / 0.05));
+    --gradient-hover: linear-gradient(135deg, hsl(46 100% 85%), hsl(35 71% 48%), hsl(46 100% 78%));
+
+    /* Animation variables */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-cascadia;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--surface));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gradient-accent);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-hover);
+  }
+}
+
+@layer components {
+  /* Glass morphism components */
+  .glass {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  .glass-card {
+    @apply glass rounded-xl p-6 shadow-2xl;
+    box-shadow: 
+      0 8px 32px 0 rgba(31, 38, 135, 0.37),
+      inset 0 1px 0 0 hsl(var(--glass-border));
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated gradient background */
+  .animated-gradient {
+    background: var(--gradient-accent);
+    background-size: 200% 200%;
+    animation: gradient-flow 3s ease infinite;
+  }
+
+  /* Glow effects */
+  .glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  .glow-hover {
+    transition: var(--transition-smooth);
+  }
+
+  .glow-hover:hover {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.7);
+    transform: translateY(-2px);
+  }
+}
+
+@layer utilities {
+  /* Animation keyframes */
+  @keyframes gradient-flow {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.8);
+    }
+  }
+
+  /* Animation classes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideInUp 0.8s ease-out;
+  }
+
+  .animate-slide-right {
+    animation: slideInRight 0.8s ease-out;
+  }
+
+  .animate-slide-left {
+    animation: slideInLeft 0.8s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+}
