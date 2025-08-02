@@ -1,44 +1,66 @@
-import { useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+import { useCallback, useEffect, lazy, Suspense } from 'react';
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+
+const About = lazy(() => import('@/components/About'));
+const Projects = lazy(() => import('@/components/Projects'));
+const Contact = lazy(() => import('@/components/Contact'));
+const Footer = lazy(() => import('@/components/Footer'));
 
 const Index = () => {
-  useEffect(() => {
-    // Add scroll-based animations when elements come into view
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: "0px 0px -100px 0px",
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("animate-slide-up");
+          entry.target.classList.add('animate-slide-up');
+          setTimeout(() => {
+            entry.target.classList.add('animation-complete');
+          }, 800);
         }
       });
-    }, observerOptions);
+    },
+    []
+  );
 
-    // Observe all elements with the data-animate attribute
-    const animatedElements = document.querySelectorAll("[data-animate]");
-    animatedElements.forEach((el) => observer.observe(el));
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
+    };
+
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions
+    );
+
+    const observeElements = () => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      animatedElements.forEach(el => observer.observe(el));
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(observeElements);
+    } else {
+      setTimeout(observeElements, 0);
+    }
 
     return () => observer.disconnect();
-  }, []);
+  }, [handleIntersection]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
         <Hero />
-        <About />
-        <Projects />
-        <Contact />
+        <Suspense fallback={<div>Loading...</div>}>
+          <About />
+          <Projects />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };

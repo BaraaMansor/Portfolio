@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
 
 const Navbar = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -13,25 +19,39 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-
-      if (currentSection) {
-        setActiveSection(currentSection.id);
-      }
+    const observerOptions = {
+      root: null, // relative to document viewport
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0,
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    const elements = sections.map(section =>
+      document.getElementById(section.id)
+    );
+    elements.forEach(el => {
+      if (el) observer.observe(el);
+    });
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      elements.forEach(el => {
+        if (el) observer.unobserve(el);
+      });
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -63,35 +83,66 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-1">
-            {sections.map((section, index) => (
+            {sections.map(section => (
               <Button
                 key={section.id}
                 variant={activeSection === section.id ? 'glass' : 'ghost'}
-                size="sm"
+                size="default"
                 onClick={() => scrollToSection(section.id)}
-                className={`animate-fade-in delay-${index * 100}`}
+                className={`animate-fade-in`}
               >
                 {section.label}
               </Button>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </Button>
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[250px] sm:w-[300px] glass-card"
+                style={{
+                  background:
+                    'linear-gradient(135deg, hsl(238, 38%, 16%, 0.1), hsla(240, 6%, 96%, 0.05))',
+                }}
+              >
+                <div className="flex flex-col items-center space-y-6 mt-12">
+                  {sections.map(section => (
+                    <SheetClose asChild key={section.id}>
+                      <Button
+                        variant={
+                          activeSection === section.id ? 'glass' : 'ghost'
+                        }
+                        size="lg"
+                        onClick={() => scrollToSection(section.id)}
+                        className="w-full text-lg"
+                      >
+                        {section.label}
+                      </Button>
+                    </SheetClose>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </nav>

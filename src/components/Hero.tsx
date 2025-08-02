@@ -23,7 +23,7 @@ const Hero = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-300"></div>
       </div>
 
-      <div className="container mx-auto px-6 text-center relative z-10">
+      <div className="container mx-auto px-6 pt-12 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Profile Image */}
           <motion.div
@@ -37,7 +37,9 @@ const Hero = () => {
               <img
                 src="/my-image.png"
                 alt="Al-Baraa Mansour"
-                className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-sm"
+                width={160}
+                height={160}
+                className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-xs"
               />
             </div>
           </motion.div>
@@ -75,52 +77,47 @@ const Hero = () => {
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
-            <Button
-              variant="hero"
-              size="xl"
-              onClick={scrollToProjects}
-              className="group"
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-20">
+            <motion.div
+              className="flex flex-col sm:flex-row items-center justify-center gap-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
             >
-              View Projects
-              <svg
-                className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <Button
+                variant="hero"
+                size="xl"
+                onClick={scrollToProjects}
+                className="group"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Button>
+                View Projects
+                <svg
+                  className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Button>
 
-            <Button
-              variant="glass"
-              size="xl"
-              onClick={() =>
-                document
-                  .getElementById('contact')
-                  ?.scrollIntoView({ behavior: 'smooth' })
-              }
-            >
-              Get In Touch
-            </Button>
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-glass-border rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-gradient-accent rounded-full mt-2 animate-pulse"></div>
-            </div>
+              <Button
+                variant="glass"
+                size="xl"
+                onClick={() =>
+                  document
+                    .getElementById('contact')
+                    ?.scrollIntoView({ behavior: 'smooth' })
+                }
+              >
+                Get In Touch
+              </Button>
+            </motion.div>
           </div>
         </div>
       </div>
