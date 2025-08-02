@@ -23,7 +23,7 @@ const Hero = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-300"></div>
       </div>
 
-      <div className="container mx-auto px-6 text-center relative z-10">
+      <div className="container mx-auto px-6 pt-12 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Profile Image */}
           <motion.div
@@ -37,6 +37,8 @@ const Hero = () => {
               <img
                 src="/my-image.png"
                 alt="Al-Baraa Mansour"
+                width={160}
+                height={160}
                 className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-xs"
               />
             </div>

@@ -14,7 +14,6 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
     toast({
       title: 'Message Sent!',
       description: "Thank you for your message. I'll get back to you soon!",

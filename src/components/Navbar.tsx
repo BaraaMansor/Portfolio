@@ -19,25 +19,39 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-
-      if (currentSection) {
-        setActiveSection(currentSection.id);
-      }
+    const observerOptions = {
+      root: null, // relative to document viewport
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0,
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    const elements = sections.map(section =>
+      document.getElementById(section.id)
+    );
+    elements.forEach(el => {
+      if (el) observer.observe(el);
+    });
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      elements.forEach(el => {
+        if (el) observer.unobserve(el);
+      });
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -73,7 +87,7 @@ const Navbar = () => {
               <Button
                 key={section.id}
                 variant={activeSection === section.id ? 'glass' : 'ghost'}
-                size="sm"
+                size="default"
                 onClick={() => scrollToSection(section.id)}
                 className={`animate-fade-in`}
               >

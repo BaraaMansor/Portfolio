@@ -6,8 +6,7 @@ const Projects = () => {
     {
       id: 1,
       title: 'Coming Soon',
-      description:
-        'A full-stack e-commerce solution built with React, Node.js, and PostgreSQL. Features include user authentication, payment processing, and admin dashboard.',
+      description: 'Coming Soon',
       technologies: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
       image: '/prj-placeholder.png',
       github: '#',
@@ -16,36 +15,30 @@ const Projects = () => {
     },
     {
       id: 2,
-      title: 'Task Management App',
-      description:
-        'A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.',
+      title: 'Coming Soon',
+      description: 'Coming Soon',
       technologies: ['React', 'TypeScript', 'Firebase', 'Material-UI'],
-      image:
-        'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&h=400&fit=crop',
+      image: '/prj-placeholder.png',
       github: '#',
       live: '#',
       featured: false,
     },
     {
       id: 3,
-      title: 'Weather Dashboard',
-      description:
-        'A responsive weather application that provides current weather, forecasts, and interactive maps using multiple weather APIs.',
+      title: 'Coming Soon',
+      description: 'Coming Soon',
       technologies: ['JavaScript', 'CSS3', 'Weather API', 'Chart.js'],
-      image:
-        'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=600&h=400&fit=crop',
+      image: '/prj-placeholder.png',
       github: '#',
       live: '#',
       featured: false,
     },
     {
       id: 4,
-      title: 'Social Media Analytics',
-      description:
-        'A comprehensive analytics dashboard for social media metrics with data visualization and automated reporting features.',
+      title: 'Coming Soon',
+      description: 'Coming Soon',
       technologies: ['React', 'Python', 'D3.js', 'MongoDB'],
-      image:
-        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
+      image: '/prj-placeholder.png',
       github: '#',
       live: '#',
       featured: true,
@@ -114,6 +107,8 @@ const Projects = () => {
                     <img
                       src={project.image}
                       alt={project.title}
+                      width={512}
+                      height={256}
                       className="w-full h-64 object-scale-down bg-surface group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
