@@ -62,6 +62,17 @@ const Navbar = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Force update DOM attributes
+    const navButtons = document.querySelectorAll('.nav-button');
+    navButtons.forEach(button => {
+      const isActive =
+        button.textContent?.toLowerCase() ===
+        activeSection.replace('hero', 'home').toLowerCase();
+      button.setAttribute('data-active', isActive ? 'true' : 'false');
+    });
+  }, [activeSection]);
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
