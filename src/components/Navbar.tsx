@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -20,22 +20,35 @@ const Navbar = () => {
 
   useEffect(() => {
     const observerOptions = {
-      root: null, // relative to document viewport
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0,
+      root: null,
+      rootMargin: '-20% 0px -20% 0px', // Less restrictive margins
+      threshold: [0, 0.1, 0.5], // Multiple thresholds for better detection
     };
 
     const observer = new IntersectionObserver(entries => {
+      // Find the section with the highest intersection ratio
+      let maxIntersectionRatio = 0;
+      let activeEntry = null;
+
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+        if (
+          entry.isIntersecting &&
+          entry.intersectionRatio > maxIntersectionRatio
+        ) {
+          maxIntersectionRatio = entry.intersectionRatio;
+          activeEntry = entry;
         }
       });
+
+      if (activeEntry) {
+        setActiveSection(activeEntry.target.id);
+      }
     }, observerOptions);
 
     const elements = sections.map(section =>
       document.getElementById(section.id)
     );
+
     elements.forEach(el => {
       if (el) observer.observe(el);
     });
@@ -54,17 +67,21 @@ const Navbar = () => {
     };
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId: string) => {
+    // Set active state immediately for better UX
+    setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'glass-card py-2 shadow-2xl' : 'bg-transparent py-4'
+      className={`fixed top-0 w-full z-50 origin-top transition-[transform,background-color,backdrop-filter,box-shadow] duration-300 py-3 ${
+        isScrolled
+          ? 'glass rounded-xl shadow-2xl scale-95'
+          : 'bg-transparent scale-100'
       }`}
     >
       <div className="container mx-auto px-6">
@@ -89,7 +106,7 @@ const Navbar = () => {
                 variant={activeSection === section.id ? 'glass' : 'ghost'}
                 size="default"
                 onClick={() => scrollToSection(section.id)}
-                className={`animate-fade-in`}
+                className="animate-fade-in"
               >
                 {section.label}
               </Button>
