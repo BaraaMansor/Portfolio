@@ -1,6 +1,7 @@
 import { useCallback, useEffect, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Spinner from '@/components/ui/spinner';
 
 const About = lazy(() => import('@/components/About'));
 const Projects = lazy(() => import('@/components/Projects'));
@@ -52,13 +53,13 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <About />
           <Projects />
           <Contact />
         </Suspense>
       </main>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Spinner />}>
         <Footer />
       </Suspense>
     </div>
