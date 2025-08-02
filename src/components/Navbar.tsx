@@ -21,28 +21,16 @@ const Navbar = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px', // Less restrictive margins
-      threshold: [0, 0.1, 0.5], // Multiple thresholds for better detection
+      rootMargin: '-10% 0px -10% 0px',
+      threshold: 0.3,
     };
 
     const observer = new IntersectionObserver(entries => {
-      // Find the section with the highest intersection ratio
-      let maxIntersectionRatio = 0;
-      let activeEntry = null;
-
       entries.forEach(entry => {
-        if (
-          entry.isIntersecting &&
-          entry.intersectionRatio > maxIntersectionRatio
-        ) {
-          maxIntersectionRatio = entry.intersectionRatio;
-          activeEntry = entry;
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
         }
       });
-
-      if (activeEntry) {
-        setActiveSection(activeEntry.target.id);
-      }
     }, observerOptions);
 
     const elements = sections.map(section =>
@@ -68,8 +56,6 @@ const Navbar = () => {
   }, []);
 
   const scrollToSection = useCallback((sectionId: string) => {
-    // Set active state immediately for better UX
-    setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -78,17 +64,17 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 origin-top transition-[transform,background-color,backdrop-filter,box-shadow] duration-300 py-3 ${
+      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? 'glass rounded-xl shadow-2xl scale-95'
-          : 'bg-transparent scale-100'
+          ? 'bg-background/80 backdrop-blur-md shadow-lg'
+          : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div
-            className="text-2xl font-bold gradient-text cursor-pointer animate-fade-in"
+            className="text-2xl font-bold gradient-text cursor-pointer"
             onClick={() => scrollToSection('hero')}
           >
             <img
@@ -99,14 +85,18 @@ const Navbar = () => {
           </div>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {sections.map(section => (
               <Button
                 key={section.id}
-                variant={activeSection === section.id ? 'glass' : 'ghost'}
-                size="default"
+                variant={activeSection === section.id ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => scrollToSection(section.id)}
-                className="animate-fade-in"
+                className={
+                  activeSection === section.id
+                    ? 'border-1 border-primary'
+                    : 'border-1 border-muted hover:bg-glass hover:text-foreground'
+                }
               >
                 {section.label}
               </Button>
@@ -133,24 +123,17 @@ const Navbar = () => {
                   </svg>
                 </Button>
               </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[250px] sm:w-[300px] glass-card"
-                style={{
-                  background:
-                    'linear-gradient(135deg, hsl(238, 38%, 16%, 0.1), hsla(240, 6%, 96%, 0.05))',
-                }}
-              >
-                <div className="flex flex-col items-center space-y-6 mt-12">
+              <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+                <div className="flex flex-col space-y-4 mt-8">
                   {sections.map(section => (
                     <SheetClose asChild key={section.id}>
                       <Button
                         variant={
-                          activeSection === section.id ? 'glass' : 'ghost'
+                          activeSection === section.id ? 'default' : 'ghost'
                         }
                         size="lg"
                         onClick={() => scrollToSection(section.id)}
-                        className="w-full text-lg"
+                        className="w-full justify-start"
                       >
                         {section.label}
                       </Button>
