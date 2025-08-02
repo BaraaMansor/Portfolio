@@ -294,7 +294,7 @@ All colors MUST be HSL.
   }
 
   .spinner::before {
-    content: "";
+    content: '';
     box-sizing: border-box;
     position: absolute;
     inset: 0px;
@@ -380,4 +380,56 @@ All colors MUST be HSL.
       box-shadow: 0 0 40px hsl(var(--primary) / 0.8);
     }
   }
+
+  .nav-button {
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .nav-button-active {
+    border-image: var(--gradient-accent) 1;
+    background: var(--gradient-accent);
+    background-clip: padding-box;
+    color: hsl(var(--primary-foreground));
+    position: relative;
+    border: 0;
+  }
+  .nav-button-active:hover {
+    border-image: var(--gradient-accent) 1;
+    background: var(--gradient-accent);
+    background-clip: padding-box;
+    color: hsl(var(--primary-foreground));
+    position: relative;
+    border: 0;
+  }
+
+  .nav-button-inactive {
+    border-color: hsl(var(--muted) / 0.3);
+    background-color: transparent;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .nav-button-inactive:hover {
+    background-color: hsl(var(--glass) / 0.5);
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--border));
+  }
+
+  /* .nav-button[data-active='true'] {
+    border-color: hsl(var(--primary)) !important;
+    background-color: hsl(var(--primary) / 0.1) !important;
+    color: hsl(var(--primary)) !important;
+  }
+
+  .nav-button[data-active='false'] {
+    border-color: hsl(var(--muted) / 0.3) !important;
+    background-color: transparent !important;
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  .nav-button[data-active='false']:hover {
+    background-color: hsl(var(--glass) / 0.5) !important;
+    color: hsl(var(--foreground)) !important;
+    border-color: hsl(var(--border)) !important;
+  } */
 }

@@ -89,14 +89,15 @@ const Navbar = () => {
             {sections.map(section => (
               <Button
                 key={section.id}
-                variant={activeSection === section.id ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
                 onClick={() => scrollToSection(section.id)}
-                className={
+                className={`nav-button transition-colors duration-200 ${
                   activeSection === section.id
-                    ? 'border-1 border-primary'
-                    : 'border-1 border-muted hover:bg-glass hover:text-foreground'
-                }
+                    ? 'nav-button-active'
+                    : 'nav-button-inactive'
+                }`}
+                data-active={activeSection === section.id}
               >
                 {section.label}
               </Button>
@@ -128,12 +129,15 @@ const Navbar = () => {
                   {sections.map(section => (
                     <SheetClose asChild key={section.id}>
                       <Button
-                        variant={
-                          activeSection === section.id ? 'default' : 'ghost'
-                        }
+                        variant="ghost"
                         size="lg"
                         onClick={() => scrollToSection(section.id)}
-                        className="w-full justify-start"
+                        className={`w-full justify-start transition-colors duration-200 ${
+                          activeSection === section.id
+                            ? 'nav-button-active'
+                            : 'nav-button-inactive'
+                        }`}
+                        data-active={activeSection === section.id}
                       >
                         {section.label}
                       </Button>
