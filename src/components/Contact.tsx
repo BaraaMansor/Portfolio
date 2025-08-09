@@ -100,99 +100,110 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
-      className="py-20 relative overflow-hidden"
+      className="py-8 sm:py-12 lg:py-20 relative overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true, margin: '-100px' }}
     >
+      {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-1/3 right-1/3 w-64 h-64 bg-gradient-accent opacity-8 rounded-full blur-3xl animate-float delay-1000"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-6xl mx-auto">
+      <div className="w-full px-3 sm:px-6 lg:px-8 relative z-10">
+        <div className="w-full max-w-none sm:max-w-6xl sm:mx-auto">
           {/* Section Header */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
               Get In <span className="gradient-text">Touch</span>
             </h2>
-            <p className="text-xl text-muted max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg lg:text-xl text-muted max-w-2xl mx-auto px-2">
               Ready to start a project together? Let's connect and bring your
               ideas to life!
             </p>
-            <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-6"></div>
+            <div className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-3 sm:mt-4 lg:mt-6"></div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
             {/* Contact Info Card */}
             <motion.div
-              className="space-y-6"
+              className="w-full"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <div className="glass-card p-8">
-                <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+              <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
+                  Contact Information
+                </h3>
 
                 {/* Availability Status */}
-                <div className="mb-8 p-4 bg-surface/30 rounded-lg border border-glass-border">
-                  <div className="flex items-center gap-3 mb-2">
+                <div className="mb-4 sm:mb-6 lg:mb-8 p-2 sm:p-3 lg:p-4 bg-surface/30 rounded-lg border border-glass-border">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
                     <div
-                      className={`w-3 h-3 rounded-full ${availability.dot} animate-pulse`}
+                      className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${availability.dot} animate-pulse`}
                     ></div>
-                    <span className={`font-medium ${availability.color}`}>
+                    <span
+                      className={`font-medium text-xs sm:text-sm lg:text-base ${availability.color}`}
+                    >
                       {availability.status}
                     </span>
                   </div>
-                  <p className="text-sm text-muted">{availability.message}</p>
+                  <p className="text-xs sm:text-sm text-muted">
+                    {availability.message}
+                  </p>
                 </div>
 
                 {/* Local Time */}
-                <div className="mb-8 p-4 bg-surface/30 rounded-lg border border-glass-border">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Icon name="clock" className="text-primary" size={20} />
-                    <span className="font-medium">Local Time</span>
+                <div className="mb-4 sm:mb-6 lg:mb-8 p-2 sm:p-3 lg:p-4 bg-surface/30 rounded-lg border border-glass-border">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                    <Icon name="clock" className="text-primary" size={16} />
+                    <span className="font-medium text-xs sm:text-sm lg:text-base">
+                      Local Time
+                    </span>
                   </div>
-                  <p className="text-2xl font-bold text-primary">
+                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
                     {currentTime}
                   </p>
-                  <p className="text-sm text-muted">GMT+3</p>
+                  <p className="text-xs sm:text-sm text-muted">GMT+3</p>
                 </div>
 
                 {/* Contact Details */}
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                   {contactInfo.map((info, index) => (
                     <div
                       key={info.label}
-                      className="flex items-center gap-4 p-4 bg-surface/20 rounded-lg border border-glass-border hover:border-primary/50 transition-all group"
+                      className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 bg-surface/20 rounded-lg border border-glass-border hover:border-primary/50 transition-all group"
                     >
-                      <div className="text-primary group-hover:text-primary/80 transition-colors">
+                      <div className="text-primary group-hover:text-primary/80 transition-colors flex-shrink-0">
                         <Icon
                           name={info.icon}
                           className="group-hover:scale-110 transition-transform"
-                          size={20}
+                          size={16}
                         />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-muted">{info.label}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs sm:text-sm text-muted">
+                          {info.label}
+                        </p>
                         {info.href ? (
                           <a
                             href={info.href}
-                            className="font-medium text-foreground hover:text-primary transition-colors"
+                            className="font-medium text-xs sm:text-sm lg:text-base text-foreground hover:text-primary transition-colors block truncate"
                           >
                             {info.value}
                           </a>
                         ) : (
-                          <p className="font-medium text-foreground">
+                          <p className="font-medium text-xs sm:text-sm lg:text-base text-foreground truncate">
                             {info.value}
                           </p>
                         )}
@@ -202,19 +213,19 @@ const Contact = () => {
                 </div>
 
                 {/* Quick Contact Button */}
-                <div className="mt-8">
+                <div className="mt-4 sm:mt-6 lg:mt-8">
                   <Button
                     variant="hero"
-                    size="lg"
-                    className="w-full group"
+                    size="sm"
+                    className="w-full group text-xs sm:text-sm lg:text-base h-8 sm:h-10 lg:h-12"
                     asChild
                   >
-                    <a href="mailto:your.email@example.com">
+                    <a href="mailto:baraadev0@gmail.com">
                       Start a Conversation
                       <Icon
                         name="arrow-right"
-                        className="ml-2 group-hover:translate-x-1 transition-transform"
-                        size={20}
+                        className="ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform"
+                        size={14}
                       />
                     </a>
                   </Button>
@@ -224,46 +235,50 @@ const Contact = () => {
 
             {/* Social Links */}
             <motion.div
-              className="space-y-6"
+              className="w-full"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              <div className="glass-card p-8">
-                <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
-                <p className="text-muted mb-8 leading-relaxed">
+              <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
+                  Let's Connect
+                </h3>
+                <p className="text-muted mb-4 sm:mb-6 lg:mb-8 leading-relaxed text-xs sm:text-sm lg:text-base">
                   I'm always open to discussing new opportunities, interesting
                   projects, or just having a chat about technology and
                   development. Choose your preferred way to reach out!
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                   {socialLinks.map((link, index) => (
                     <a
                       key={link.name}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-surface/30 border border-glass-border rounded-lg hover:border-primary/50 hover:bg-surface/50 transition-all group"
+                      className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 bg-surface/30 border border-glass-border rounded-lg hover:border-primary/50 hover:bg-surface/50 transition-all group"
                     >
-                      <div className="text-muted group-hover:text-primary transition-colors">
+                      <div className="text-muted group-hover:text-primary transition-colors flex-shrink-0">
                         <Icon
                           name={link.icon}
                           className="group-hover:scale-110 transition-transform"
-                          size={24}
+                          size={18}
                         />
                       </div>
-                      <div className="flex-1">
-                        <span className="font-medium block">{link.name}</span>
-                        <span className="text-sm text-muted">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium block text-xs sm:text-sm lg:text-base truncate">
+                          {link.name}
+                        </span>
+                        <span className="text-xs sm:text-sm text-muted block truncate">
                           {link.description}
                         </span>
                       </div>
                       <Icon
                         name="external-link"
-                        className="ml-auto group-hover:translate-x-1 transition-transform text-muted group-hover:text-primary"
-                        size={16}
+                        className="ml-auto group-hover:translate-x-1 transition-transform text-muted group-hover:text-primary flex-shrink-0"
+                        size={12}
                       />
                     </a>
                   ))}

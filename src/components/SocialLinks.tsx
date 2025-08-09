@@ -23,7 +23,7 @@ const socialLinks = [
 
 const SocialLinks = () => {
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap justify-center gap-4">
       {socialLinks.map((social, index) => (
         <Button
           key={social.name}
