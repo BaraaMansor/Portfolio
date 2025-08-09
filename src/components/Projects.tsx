@@ -1,7 +1,21 @@
+import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { useMotionValue, useTransform, motion } from 'framer-motion';
 
 const Projects = () => {
+  // Use motion values for scroll-based animations
+  const scrollY = useMotionValue(0);
+
+  // Update scroll value efficiently
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollY.set(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrollY]);
+
   const projects = [
     {
       id: 1,
@@ -45,6 +59,11 @@ const Projects = () => {
     },
   ];
 
+  const handleViewMore = useCallback(() => {
+    // Add your view more logic here
+    console.log('View more projects');
+  }, []);
+
   return (
     <motion.section
       id="projects"
@@ -52,9 +71,9 @@ const Projects = () => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: '-100px' }}
     >
-      {/* Background Elements */}
+      {/* Background Elements - Use CSS animations */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-500"></div>
@@ -67,7 +86,7 @@ const Projects = () => {
             className="text-center mb-16"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -85,13 +104,17 @@ const Projects = () => {
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
                 className={`glass-card group hover:bg-surface/60 transition-all duration-500 ${
                   project.featured ? 'lg:grid-cols-2' : ''
                 } ${index % 2 === 0 ? 'lg:grid-cols-2' : 'lg:grid-cols-2'}`}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                viewport={{ once: true, margin: '-50px' }}
               >
                 <div
                   className={`grid ${
@@ -99,10 +122,14 @@ const Projects = () => {
                   } gap-6 items-center`}
                 >
                   {/* Project Image */}
-                  <div
+                  <motion.div
                     className={`${
                       index % 2 === 0 ? 'order-1' : 'order-2 lg:order-1'
                     } overflow-hidden rounded-lg`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 + 0.2 }}
+                    viewport={{ once: true }}
                   >
                     <img
                       src={project.image}
@@ -110,14 +137,19 @@ const Projects = () => {
                       width={512}
                       height={256}
                       className="w-full h-64 object-scale-down bg-surface group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
                     />
-                  </div>
+                  </motion.div>
 
                   {/* Project Content */}
-                  <div
+                  <motion.div
                     className={`${
                       index % 2 === 0 ? 'order-2' : 'order-1 lg:order-2'
                     } space-y-4`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
+                    viewport={{ once: true }}
                   >
                     <div className="flex items-center gap-2">
                       <h3 className="text-2xl font-bold gradient-text">
@@ -136,18 +168,31 @@ const Projects = () => {
 
                     {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
-                      {project.technologies.map(tech => (
-                        <span
+                      {project.technologies.map((tech, techIndex) => (
+                        <motion.span
                           key={tech}
                           className="px-3 py-1 text-sm bg-surface/50 text-foreground rounded-full border border-glass-border"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            duration: 0.3,
+                            delay: index * 0.1 + 0.4 + techIndex * 0.05,
+                          }}
+                          viewport={{ once: true }}
                         >
                           {tech}
-                        </span>
+                        </motion.span>
                       ))}
                     </div>
 
                     {/* Project Links */}
-                    <div className="flex gap-4 pt-2">
+                    <motion.div
+                      className="flex gap-4 pt-2"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 + 0.5 }}
+                      viewport={{ once: true }}
+                    >
                       <Button variant="outline" size="sm" asChild>
                         <a
                           href={project.github}
@@ -187,8 +232,8 @@ const Projects = () => {
                           Live Demo
                         </a>
                       </Button>
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
                 </div>
               </motion.div>
             ))}
@@ -199,10 +244,10 @@ const Projects = () => {
             className="text-center mt-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Button variant="glass" size="lg">
+            <Button variant="glass" size="lg" onClick={handleViewMore}>
               View More Projects
               <svg
                 className="w-5 h-5 ml-2"

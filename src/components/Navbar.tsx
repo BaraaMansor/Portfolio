@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useMotionValue, useTransform, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -9,7 +10,11 @@ import {
 
 const Navbar = () => {
   const [activeSection, setActiveSection] = useState('hero');
-  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Use useMotionValue for scroll-based animations (no re-renders)
+  const scrollY = useMotionValue(0);
+  const navOpacity = useTransform(scrollY, [0, 20], [0, 0.8]);
+  const navBlur = useTransform(scrollY, [0, 20], [0, 20]);
 
   const sections = [
     { id: 'hero', label: 'Home' },
@@ -41,8 +46,9 @@ const Navbar = () => {
       if (el) observer.observe(el);
     });
 
+    // Update motion value instead of state (no re-renders)
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      scrollY.set(window.scrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -53,7 +59,7 @@ const Navbar = () => {
       });
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [scrollY]);
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -62,24 +68,26 @@ const Navbar = () => {
     }
   }, []);
 
-  useEffect(() => {
-    // Force update DOM attributes
-    const navButtons = document.querySelectorAll('.nav-button');
-    navButtons.forEach(button => {
-      const isActive =
-        button.textContent?.toLowerCase() ===
-        activeSection.replace('hero', 'home').toLowerCase();
-      button.setAttribute('data-active', isActive ? 'true' : 'false');
-    });
-  }, [activeSection]);
-
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-background/80 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
-      }`}
+    <motion.nav
+      className="fixed top-0 left-0 right-0 w-full z-50 transition-colors duration-300"
+      style={{
+        backgroundColor: useTransform(
+          scrollY,
+          [0, 20],
+          ['rgba(9, 10, 34, 0)', 'rgba(9, 10, 34, 0.8)']
+        ),
+        backdropFilter: useTransform(
+          scrollY,
+          [0, 20],
+          ['blur(0px)', 'blur(20px)']
+        ),
+        boxShadow: useTransform(
+          scrollY,
+          [0, 20],
+          ['none', '0 4px 6px -1px rgba(0, 0, 0, 0.1)']
+        ),
+      }}
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
@@ -160,7 +168,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

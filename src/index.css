@@ -414,22 +414,4 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
     border-color: hsl(var(--border));
   }
-
-  /* .nav-button[data-active='true'] {
-    border-color: hsl(var(--primary)) !important;
-    background-color: hsl(var(--primary) / 0.1) !important;
-    color: hsl(var(--primary)) !important;
-  }
-
-  .nav-button[data-active='false'] {
-    border-color: hsl(var(--muted) / 0.3) !important;
-    background-color: transparent !important;
-    color: hsl(var(--muted-foreground)) !important;
-  }
-
-  .nav-button[data-active='false']:hover {
-    background-color: hsl(var(--glass) / 0.5) !important;
-    color: hsl(var(--foreground)) !important;
-    border-color: hsl(var(--border)) !important;
-  } */
 }
