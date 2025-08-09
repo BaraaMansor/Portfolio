@@ -1,23 +1,36 @@
+import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { useMotionValue, useTransform, motion } from 'framer-motion';
 
 const Hero = () => {
-  const scrollToProjects = () => {
+  const scrollY = useMotionValue(0);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+
+  const scrollToProjects = useCallback(() => {
     const element = document.getElementById('projects');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
+
+  const scrollToContact = useCallback(() => {
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   return (
     <motion.section
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      style={{
+        opacity,
+        scale,
+      }}
     >
-      {/* Animated background elements */}
+      {/* Animated background elements - use CSS animations instead of JS */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-20 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-300"></div>
@@ -26,12 +39,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 pt-12 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Profile Image */}
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div className="mb-8">
             <div className="w-40 h-40 mx-auto mb-8 relative">
               <div className="absolute inset-0 bg-gradient-accent rounded-full blur-lg opacity-50 animate-pulse-glow"></div>
               <img
@@ -42,48 +50,25 @@ const Hero = () => {
                 className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-xs"
               />
             </div>
-          </motion.div>
+          </div>
 
-          {/* Main Heading */}
-          <motion.h1
-            className="text-6xl md:text-8xl font-bold mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
+          <h1 className="text-6xl md:text-8xl font-bold mb-6">
             <span className="gradient-text">Al-Baraa</span>
-          </motion.h1>
+          </h1>
 
-          {/* Subtitle */}
-          <motion.h2
-            className="text-2xl md:text-4xl font-semibold text-muted mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
+          <h2 className="text-2xl md:text-4xl font-semibold text-muted mb-6">
             Full-stack Web Developer
-          </motion.h2>
+          </h2>
 
-          {/* Description */}
-          <motion.p
-            className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-12 leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
+          <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-12 leading-relaxed">
             Creating responsive websites for different markets, providing
             valuable coverage for any business. I am a Software Engineer that
             loves to create stuff!
-          </motion.p>
+          </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-20">
-            <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
-            >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Button
                 variant="hero"
                 size="xl"
@@ -106,18 +91,10 @@ const Hero = () => {
                 </svg>
               </Button>
 
-              <Button
-                variant="glass"
-                size="xl"
-                onClick={() =>
-                  document
-                    .getElementById('contact')
-                    ?.scrollIntoView({ behavior: 'smooth' })
-                }
-              >
+              <Button variant="glass" size="xl" onClick={scrollToContact}>
                 Get In Touch
               </Button>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,22 +1,22 @@
-import { useCallback, useEffect, lazy, Suspense } from 'react';
+import { useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Spinner from '@/components/ui/spinner';
-
-const About = lazy(() => import('@/components/About'));
-const Projects = lazy(() => import('@/components/Projects'));
-const Contact = lazy(() => import('@/components/Contact'));
-const Footer = lazy(() => import('@/components/Footer'));
+import About from '@/components/About';
+import Projects from '@/components/Projects';
+import Contact from '@/components/Contact';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-slide-up');
+          entry.target.classList.add('animate-fade-in');
+
+          // Clean up will-change after animation
           setTimeout(() => {
-            entry.target.classList.add('animation-complete');
-          }, 800);
+            (entry.target as HTMLElement).style.willChange = 'auto';
+          }, 1000);
         }
       });
     },
@@ -24,44 +24,77 @@ const Index = () => {
   );
 
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    };
-
-    const observer = new IntersectionObserver(
-      handleIntersection,
-      observerOptions
-    );
-
-    const observeElements = () => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      animatedElements.forEach(el => observer.observe(el));
+    // Preload critical images
+    const preloadImages = () => {
+      const criticalImages = ['/my-image.png', '/myLogoGold.svg'];
+      criticalImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
     };
 
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(observeElements);
+      requestIdleCallback(() => {
+        preloadImages();
+
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px',
+        };
+
+        const observer = new IntersectionObserver(
+          handleIntersection,
+          observerOptions
+        );
+
+        const animatedElements = document.querySelectorAll('[data-animate]');
+        animatedElements.forEach(el => {
+          (el as HTMLElement).style.willChange = 'opacity, transform';
+          observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+      });
     } else {
-      setTimeout(observeElements, 0);
+      // Fallback for older browsers
+      setTimeout(() => {
+        preloadImages();
+      }, 100);
     }
 
-    return () => observer.disconnect();
+    // Performance monitoring
+    if ('performance' in window && 'PerformanceObserver' in window) {
+      try {
+        const perfObserver = new PerformanceObserver(list => {
+          list.getEntries().forEach(entry => {
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Performance entry:', entry);
+            }
+          });
+        });
+
+        perfObserver.observe({ entryTypes: ['measure', 'navigation'] });
+
+        return () => perfObserver.disconnect();
+      } catch (e) {
+        console.log('Performance monitoring not available');
+      }
+    }
   }, [handleIntersection]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+
       <main>
         <Hero />
-        <Suspense fallback={<Spinner />}>
-          <About />
-          <Projects />
-          <Contact />
-        </Suspense>
+        <About />
+        <Projects />
+        <Contact />
       </main>
-      <Suspense fallback={<Spinner />}>
-        <Footer />
-      </Suspense>
+
+
+      <Footer />
     </div>
   );
 };
