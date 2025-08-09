@@ -1,23 +1,24 @@
 import { Button } from '@/components/ui/button';
+import Icon from '@/components/ui/Icon';
 
 const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com/BaraaMansor', icon: 'github.svg' },
+  { name: 'GitHub', url: 'https://github.com/BaraaMansor', icon: 'github' },
   {
     name: 'LinkedIn',
     url: 'https://linkedin.com/in/baraamansor',
-    icon: 'linkedin.svg',
+    icon: 'linkedin',
   },
   {
-    name: 'Youtube',
+    name: 'YouTube',
     url: 'https://www.youtube.com/@AlBaraaMansor',
-    icon: 'youtube.svg',
+    icon: 'youtube',
   },
   {
     name: 'Instagram',
     url: 'https://www.instagram.com/baraadev0_/',
-    icon: 'instagram.svg',
+    icon: 'instagram',
   },
-  { name: 'Email', url: 'mailto:baraadev0@gmail.com', icon: 'envelope.svg' },
+  { name: 'Email', url: 'mailto:baraadev0@gmail.com', icon: 'email' },
 ];
 
 const SocialLinks = () => {
@@ -28,7 +29,7 @@ const SocialLinks = () => {
           key={social.name}
           variant="outline"
           size="sm"
-          className={`glow-hover animate-slide-up delay-${index * 100}`}
+          className={`glow-hover animate-slide-up delay-${index * 100} group`}
           asChild
         >
           <a
@@ -37,12 +38,10 @@ const SocialLinks = () => {
             rel="noopener noreferrer"
             className="flex items-center"
           >
-            <img
-              src={`/${social.icon}`}
-              alt={social.name}
-              width={24}
-              height={24}
-              className="h-5 w-5"
+            <Icon
+              name={social.icon}
+              className="group-hover:scale-110 transition-transform"
+              size={20}
             />
             <span className="ml-2">{social.name}</span>
           </a>

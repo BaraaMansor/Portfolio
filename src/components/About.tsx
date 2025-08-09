@@ -1,18 +1,8 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { useMotionValue, useTransform, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const About = () => {
-  const scrollY = useMotionValue(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      scrollY.set(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrollY]);
-
   const skills = [
     {
       category: 'Frontend',
@@ -83,7 +73,6 @@ const About = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* About Content */}
             <motion.div
               className="space-y-6 glass-card"
               initial={{ opacity: 0, x: -50 }}
@@ -91,46 +80,28 @@ const About = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <motion.p
-                className="text-lg text-muted leading-relaxed"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-              >
-                Hi! I'm Al-Baraa, a passionate full-stack developer with a love
-                for creating innovative web solutions. I specialize in modern
-                web technologies and enjoy bringing ideas to life through clean,
+              <p className="text-lg text-muted leading-relaxed">
+                Hi! I'm <span className="gradient-text">Al-Baraa</span>, a
+                passionate full-stack developer with a love for creating
+                innovative web solutions. I specialize in modern web
+                technologies and enjoy bringing ideas to life through clean,
                 efficient code.
-              </motion.p>
+              </p>
 
-              <motion.p
-                className="text-lg text-muted leading-relaxed"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
+              <p className="text-lg text-muted leading-relaxed">
                 My journey in web development started with curiosity and has
                 evolved into a passion for building user-friendly applications
                 that make a difference. I'm always eager to learn new
                 technologies and tackle challenging problems.
-              </motion.p>
+              </p>
 
-              <motion.p
-                className="text-lg text-muted leading-relaxed"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                viewport={{ once: true }}
-              >
+              <p className="text-lg text-muted leading-relaxed">
                 When I'm not coding, you can find me exploring new technologies,
-                contributing to open-source projects, or sharing knowledge with
-                the developer community.
-              </motion.p>
+                or sharing knowledge with the developer community by making
+                courses and content.
+              </p>
             </motion.div>
 
-            {/* Skills Section */}
             <motion.div
               className="space-y-6"
               initial={{ opacity: 0, x: 50 }}
@@ -154,26 +125,19 @@ const About = () => {
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{skillGroup.icon}</span>
-                      <h4 className="text-xl font-semibold">
+                      <h4 className="text-xl font-semibold gradient-text">
                         {skillGroup.category}
                       </h4>
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                      {skillGroup.technologies.map((tech, techIndex) => (
-                        <motion.span
+                      {skillGroup.technologies.map(tech => (
+                        <span
                           key={tech}
                           className="px-3 py-1 text-sm bg-surface/50 text-foreground rounded-full border border-glass-border hover:border-primary/50 transition-colors"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{
-                            duration: 0.3,
-                            delay: 0.5 + index * 0.1 + techIndex * 0.05,
-                          }}
-                          viewport={{ once: true }}
                         >
                           {tech}
-                        </motion.span>
+                        </span>
                       ))}
                     </div>
                   </motion.div>
