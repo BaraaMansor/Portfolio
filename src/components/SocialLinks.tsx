@@ -4,6 +4,11 @@ import Icon from '@/components/ui/Icon';
 const socialLinks = [
   { name: 'GitHub', url: 'https://github.com/BaraaMansor', icon: 'github' },
   {
+    name: 'Instagram',
+    url: 'https://www.instagram.com/baraadev0_/',
+    icon: 'instagram',
+  },
+  {
     name: 'LinkedIn',
     url: 'https://linkedin.com/in/baraamansor',
     icon: 'linkedin',
@@ -14,11 +19,10 @@ const socialLinks = [
     icon: 'youtube',
   },
   {
-    name: 'Instagram',
-    url: 'https://www.instagram.com/baraadev0_/',
-    icon: 'instagram',
+    name: 'Email',
+    url: 'mailto:baraadev0@gmail.com',
+    icon: 'email',
   },
-  { name: 'Email', url: 'mailto:baraadev0@gmail.com', icon: 'email' },
 ];
 
 const SocialLinks = () => {
@@ -29,7 +33,7 @@ const SocialLinks = () => {
           key={social.name}
           variant="outline"
           size="sm"
-          className={`glow-hover animate-slide-up delay-${index * 100} group`}
+          className={`glow-hover animate-slide-up group`}
           asChild
         >
           <a
