@@ -2,41 +2,14 @@ import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Icon from '@/components/ui/Icon';
+import { getFeaturedProjects } from '@/data/projects';
 
 const Projects = () => {
-  const projects = [
-    {
-      id: 1,
-      title: 'Coming Soon',
-      description: 'Coming Soon',
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-      image: '/prj-placeholder.png',
-      github: '#',
-      live: '#',
-    },
-    {
-      id: 2,
-      title: 'Coming Soon',
-      description: 'Coming Soon',
-      technologies: ['React', 'TypeScript', 'Firebase', 'Material-UI'],
-      image: '/prj-placeholder.png',
-      github: '#',
-      live: '#',
-    },
-    {
-      id: 3,
-      title: 'Coming Soon',
-      description: 'Coming Soon',
-      technologies: ['JavaScript', 'CSS3', 'Weather API', 'Chart.js'],
-      image: '/prj-placeholder.png',
-      github: '#',
-      live: '#',
-    },
-  ];
+  const featuredProjects = getFeaturedProjects();
 
   const handleViewAllProjects = useCallback(() => {
-    // Navigate to projects page or show more projects
-    console.log('Navigate to full projects page');
+    // Navigate to projects page
+    window.location.href = '/projects';
   }, []);
 
   return (
@@ -67,7 +40,7 @@ const Projects = () => {
               Featured <span className="gradient-text">Projects</span>
             </h2>
             <p className="text-xl text-muted max-w-2xl mx-auto">
-              Here are some of my recent projects that showcase my skills and
+              Here are some of my featured projects that showcase my skills and
               passion for development.
             </p>
             <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-6"></div>
@@ -75,7 +48,7 @@ const Projects = () => {
 
           {/* Projects Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {projects.map((project, index) => (
+            {featuredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
                 className="group"
@@ -90,6 +63,13 @@ const Projects = () => {
               >
                 {/* Project Card */}
                 <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
+                  {/* Featured Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="px-2 py-1 text-xs bg-gradient-accent text-primary-foreground rounded-full font-medium">
+                      Featured
+                    </span>
+                  </div>
+
                   {/* Project Image */}
                   <div className="relative h-48 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
@@ -148,26 +128,28 @@ const Projects = () => {
                         </a>
                       </Button>
 
-                      <Button
-                        variant="default"
-                        size="sm"
-                        asChild
-                        className="flex-1 bg-gradient-accent hover:bg-gradient-accent/90 group"
-                      >
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2"
+                      {project.live !== '#' && (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          asChild
+                          className="flex-1 bg-gradient-accent hover:bg-gradient-accent/90 group"
                         >
-                          <Icon
-                            name="external-link"
-                            className="group-hover:scale-110 transition-transform"
-                            size={16}
-                          />
-                          Live
-                        </a>
-                      </Button>
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <Icon
+                              name="external-link"
+                              className="group-hover:scale-110 transition-transform"
+                              size={16}
+                            />
+                            Live
+                          </a>
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -184,7 +166,6 @@ const Projects = () => {
             viewport={{ once: true }}
           >
             <div className="relative inline-block">
-              {/* Gradient background for button */}
               <div className="absolute inset-0 bg-gradient-accent rounded-lg blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
               <Button
                 variant="hero"
