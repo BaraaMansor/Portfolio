@@ -229,12 +229,12 @@ const ProjectsPage = () => {
                 >
                   <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
                     {/* Project Image */}
-                    <div className="relative h-40 sm:h-48 overflow-hidden">
+                    <div className="relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full aspect-[4/3] rounded-lg object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
 
@@ -288,34 +288,39 @@ const ProjectsPage = () => {
 
                       {/* Project Links */}
                       <div className="flex gap-3">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="flex-1 group"
-                        >
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2"
+                        {/* Conditionally render Code button only for non-private projects */}
+                        {!project.private && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            asChild
+                            className="flex-1 group"
                           >
-                            <Icon
-                              name="github"
-                              className="group-hover:scale-110 transition-transform"
-                              size={16}
-                            />
-                            <span className="hidden sm:inline">Code</span>
-                            <span className="sm:hidden">Code</span>
-                          </a>
-                        </Button>
+                            <a
+                              href={project.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-2"
+                            >
+                              <Icon
+                                name="github"
+                                className="group-hover:scale-110 transition-transform"
+                                size={16}
+                              />
+                              <span className="hidden sm:inline">Code</span>
+                              <span className="sm:hidden">Code</span>
+                            </a>
+                          </Button>
+                        )}
 
                         {project.live !== '#' && (
                           <Button
                             variant="default"
                             size="sm"
                             asChild
-                            className="flex-1 bg-gradient-accent hover:bg-gradient-accent/90 group"
+                            className={`${
+                              project.private ? 'flex-1' : 'flex-1'
+                            } bg-gradient-accent hover:bg-gradient-accent/90 group relative`}
                           >
                             <a
                               href={project.live}
@@ -323,12 +328,21 @@ const ProjectsPage = () => {
                               rel="noopener noreferrer"
                               className="flex items-center justify-center gap-2"
                             >
+                              {project.private && (
+                                <Icon
+                                  name="lock"
+                                  className="opacity-70"
+                                  size={14}
+                                />
+                              )}
                               <Icon
                                 name="external-link"
                                 className="group-hover:scale-110 transition-transform"
                                 size={16}
                               />
-                              <span className="hidden sm:inline">Live</span>
+                              <span className="hidden sm:inline">
+                                Live Demo
+                              </span>
                               <span className="sm:hidden">Demo</span>
                             </a>
                           </Button>

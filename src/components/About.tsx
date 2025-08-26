@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
 const About = () => {
@@ -7,8 +6,9 @@ const About = () => {
     {
       category: 'Frontend',
       technologies: [
-        'React',
+        'JavaScript',
         'TypeScript',
+        'React',
         'Next.js',
         'Tailwind CSS',
         'Framer Motion',
@@ -19,17 +19,17 @@ const About = () => {
       category: 'Backend',
       technologies: [
         'Node.js',
+        'Express.js',
         'Hono.js',
         'Python',
-        'PostgreSQL',
-        'MongoDB',
+        'SQL',
         'Restful API',
       ],
       icon: '⚙️',
     },
     {
       category: 'Tools & Others',
-      technologies: ['Git', 'Docker', 'AWS', 'Figma', 'Linux'],
+      technologies: ['Git', 'Cloudflare', 'Figma'],
       icon: '🛠️',
     },
   ];
