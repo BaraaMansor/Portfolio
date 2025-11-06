@@ -57,10 +57,10 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    title: 'TypingHub',
+    title: 'Dazen',
     description:
-      'A full-stack typing speed test application with real-time WPM calculation, accuracy tracking, and user statistics.',
-    technologies: ['React', 'Astro', 'PostgreSQL', 'Hono.js', 'Socket.io'],
+      "unified gamer identity layer that connects your fragmented gaming life across platforms. It's not a new social network, but a meta-network that brings together what you play, who you play with, and where you belong — all in one place.",
+    technologies: ['Next.js', 'PostgreSQL', 'Supabase', 'Tailwind CSS'],
     image: '/prj-placeholder.png',
     github: '#',
     live: '#',
