@@ -64,7 +64,8 @@ const Navbar = () => {
     const element = document.getElementById(sectionId);
     if (element) {
       const navHeight = document.getElementById('site-nav')?.offsetHeight ?? 96;
-      const targetY = element.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+      const targetY =
+        element.getBoundingClientRect().top + window.scrollY - navHeight - 8;
       window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
     }
   }, []);
@@ -91,7 +92,11 @@ const Navbar = () => {
             aria-label="Go to top"
           >
             <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
-              <img src="/myLogoGold.svg" alt="Al-Baraa Logo" className="h-6 w-6" />
+              <img
+                src="/myLogoGold.svg"
+                alt="Al-Baraa Logo"
+                className="h-6 w-6"
+              />
             </span>
             <span className="text-sm font-semibold tracking-tight text-foreground hidden sm:inline">
               Al-Baraa Mansor
@@ -117,7 +122,10 @@ const Navbar = () => {
                     data-active={isActive}
                   >
                     {isActive && (
-                      <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,229,161,0.25),transparent_60%)]" aria-hidden />
+                      <span
+                        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,229,161,0.25),transparent_60%)]"
+                        aria-hidden
+                      />
                     )}
                     <span className="relative">{section.label}</span>
                   </Button>
@@ -177,11 +185,19 @@ const Navbar = () => {
                 <div className="pt-6 pb-4">
                   <div className="flex items-center gap-3">
                     <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
-                      <img src="/myLogoGold.svg" alt="Al-Baraa Logo" className="h-6 w-6" />
+                      <img
+                        src="/myLogoGold.svg"
+                        alt="Al-Baraa Logo"
+                        className="h-6 w-6"
+                      />
                     </span>
                     <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-foreground">Navigation</span>
-                      <span className="text-xs text-muted-foreground">Jump to a section</span>
+                      <span className="text-sm font-semibold text-foreground">
+                        Navigation
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        Jump to a section
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -205,8 +221,8 @@ const Navbar = () => {
                                 ? 'shadow-[0_0_0_1px_rgba(255,229,161,0.5),0_10px_30px_rgba(255,229,161,0.45)]'
                                 : 'text-foreground bg-[rgba(255,229,161,0.12)] shadow-[0_0_0_1px_rgba(255,229,161,0.35)]'
                               : isContact
-                                ? 'text-muted-foreground'
-                                : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                              ? 'text-muted-foreground'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
                           }`}
                           style={
                             isContact
