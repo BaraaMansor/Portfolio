@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useMotionValue, useTransform, motion } from 'framer-motion';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -10,18 +10,17 @@ import {
 
 const Navbar = () => {
   const [activeSection, setActiveSection] = useState('hero');
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Use useMotionValue for scroll-based animations (no re-renders)
-  const scrollY = useMotionValue(0);
-  const navOpacity = useTransform(scrollY, [0, 20], [0, 0.8]);
-  const navBlur = useTransform(scrollY, [0, 20], [0, 20]);
-
-  const sections = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
-  ];
+  const sections = useMemo(
+    () => [
+      { id: 'hero', label: 'Home' },
+      { id: 'about', label: 'About' },
+      { id: 'projects', label: 'Projects' },
+      { id: 'contact', label: 'Contact' },
+    ],
+    []
+  );
 
   useEffect(() => {
     const observerOptions = {
@@ -46,11 +45,11 @@ const Navbar = () => {
       if (el) observer.observe(el);
     });
 
-    // Update motion value instead of state (no re-renders)
     const handleScroll = () => {
-      scrollY.set(window.scrollY);
+      setIsScrolled(window.scrollY > 10);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
@@ -59,75 +58,103 @@ const Navbar = () => {
       });
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollY]);
+  }, [sections]);
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const navHeight = document.getElementById('site-nav')?.offsetHeight ?? 96;
+      const targetY = element.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
     }
   }, []);
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 w-full z-50 transition-colors duration-300"
-      style={{
-        backgroundColor: useTransform(
-          scrollY,
-          [0, 20],
-          ['rgba(9, 10, 34, 0)', 'rgba(9, 10, 34, 0.8)']
-        ),
-        backdropFilter: useTransform(
-          scrollY,
-          [0, 20],
-          ['blur(0px)', 'blur(20px)']
-        ),
-        boxShadow: useTransform(
-          scrollY,
-          [0, 20],
-          ['none', '0 4px 6px -1px rgba(0, 0, 0, 0.1)']
-        ),
-      }}
+      id="site-nav"
+      className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none transition-all duration-300"
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: -12 }}
     >
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div
-            className="text-2xl font-bold gradient-text cursor-pointer"
+      <div className="pointer-events-auto w-full max-w-6xl px-4">
+        <motion.div
+          className={`rounded-2xl md:rounded-full px-3 md:px-4 py-2.5 md:py-3 flex items-center gap-3 transition-[background-color,transform,backdrop-filter,box-shadow,border-color] duration-300 ${
+            isScrolled
+              ? 'bg-[rgba(9,10,34,0.82)] border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl'
+              : 'bg-transparent border border-transparent shadow-none backdrop-blur-0'
+          }`}
+          layout
+        >
+          <button
+            className="flex items-center gap-3 rounded-full px-2 py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))] focus:ring-opacity-70 focus:ring-offset-transparent"
             onClick={() => scrollToSection('hero')}
+            aria-label="Go to top"
           >
-            <img
-              src="/myLogoGold.svg"
-              alt="Al-Baraa Logo"
-              className="h-8 w-auto"
-            />
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
+              <img src="/myLogoGold.svg" alt="Al-Baraa Logo" className="h-6 w-6" />
+            </span>
+            <span className="text-sm font-semibold tracking-tight text-foreground hidden sm:inline">
+              Al-Baraa Mansor
+            </span>
+          </button>
+
+          <div className="hidden md:flex flex-1 items-center justify-center gap-1">
+            {sections
+              .filter(section => section.id !== 'contact')
+              .map(section => {
+                const isActive = activeSection === section.id;
+                return (
+                  <Button
+                    key={section.id}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => scrollToSection(section.id)}
+                    className={`relative px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                      isActive
+                        ? 'text-foreground bg-[rgba(255,229,161,0.12)] shadow-[0_0_0_1px_rgba(255,229,161,0.35)]'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                    }`}
+                    data-active={isActive}
+                  >
+                    {isActive && (
+                      <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,229,161,0.25),transparent_60%)]" aria-hidden />
+                    )}
+                    <span className="relative">{section.label}</span>
+                  </Button>
+                );
+              })}
           </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-2">
-            {sections.map(section => (
-              <Button
-                key={section.id}
-                variant="ghost"
-                size="sm"
-                onClick={() => scrollToSection(section.id)}
-                className={`nav-button transition-colors duration-200 ${
-                  activeSection === section.id
-                    ? 'nav-button-active'
-                    : 'nav-button-inactive'
-                }`}
-                data-active={activeSection === section.id}
-              >
-                {section.label}
-              </Button>
-            ))}
+          <div className="hidden md:flex items-center ml-auto">
+            {(() => {
+              const isContactActive = activeSection === 'contact';
+              return (
+                <Button
+                  size="sm"
+                  onClick={() => scrollToSection('contact')}
+                  className={`rounded-full px-5 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition transform hover:-translate-y-[1px] ${
+                    isContactActive
+                      ? 'shadow-[0_0_0_1px_rgba(255,229,161,0.6),0_10px_30px_rgba(255,229,161,0.45)]'
+                      : 'shadow-lg shadow-[rgba(255,229,161,0.28)] hover:shadow-[rgba(255,229,161,0.4)]'
+                  }`}
+                  style={{ background: 'var(--gradient-accent)' }}
+                  data-active={isContactActive}
+                >
+                  Contact
+                </Button>
+              );
+            })()}
           </div>
 
-          {/* Mobile Menu */}
-          <div className="md:hidden">
+          <div className="md:hidden ml-auto">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full border border-white/10 hover:bg-white/10"
+                  aria-label="Open menu"
+                >
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -143,30 +170,61 @@ const Navbar = () => {
                   </svg>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[250px] sm:w-[300px]">
-                <div className="flex flex-col space-y-4 mt-8">
-                  {sections.map(section => (
-                    <SheetClose asChild key={section.id}>
-                      <Button
-                        variant="ghost"
-                        size="lg"
-                        onClick={() => scrollToSection(section.id)}
-                        className={`w-full justify-start transition-colors duration-200 ${
-                          activeSection === section.id
-                            ? 'nav-button-active'
-                            : 'nav-button-inactive'
-                        }`}
-                        data-active={activeSection === section.id}
-                      >
-                        {section.label}
-                      </Button>
-                    </SheetClose>
-                  ))}
+              <SheetContent
+                side="right"
+                className="w-[260px] sm:w-[320px] bg-[hsl(var(--surface))] border-l border-white/10 text-foreground"
+              >
+                <div className="pt-6 pb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
+                      <img src="/myLogoGold.svg" alt="Al-Baraa Logo" className="h-6 w-6" />
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-foreground">Navigation</span>
+                      <span className="text-xs text-muted-foreground">Jump to a section</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-3">
+                  {sections.map(section => {
+                    const isActive = activeSection === section.id;
+                    const isContact = section.id === 'contact';
+                    return (
+                      <SheetClose asChild key={section.id}>
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          onClick={() => scrollToSection(section.id)}
+                          className={`w-full justify-start rounded-xl text-base ${
+                            isContact
+                              ? 'text-[hsl(var(--primary-foreground))] shadow-[rgba(255,229,161,0.28)_0_8px_24px] hover:shadow-[rgba(255,229,161,0.4)_0_10px_32px]'
+                              : ''
+                          } ${
+                            isActive
+                              ? isContact
+                                ? 'shadow-[0_0_0_1px_rgba(255,229,161,0.5),0_10px_30px_rgba(255,229,161,0.45)]'
+                                : 'text-foreground bg-[rgba(255,229,161,0.12)] shadow-[0_0_0_1px_rgba(255,229,161,0.35)]'
+                              : isContact
+                                ? 'text-muted-foreground'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                          }`}
+                          style={
+                            isContact
+                              ? { background: 'var(--gradient-accent)' }
+                              : undefined
+                          }
+                          data-active={isActive}
+                        >
+                          {section.label}
+                        </Button>
+                      </SheetClose>
+                    );
+                  })}
                 </div>
               </SheetContent>
             </Sheet>
           </div>
-        </div>
+        </motion.div>
       </div>
     </motion.nav>
   );
