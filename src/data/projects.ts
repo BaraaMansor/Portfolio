@@ -16,16 +16,16 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
-    title: 'Tajer',
+    title: 'Dazen',
     description:
-      'A full-stack typing speed test application with real-time WPM calculation, accuracy tracking, and user statistics.',
-    technologies: ['Hono.js', 'D1 Database', 'Cloudflare', 'Restful API'],
-    image: '/projects/Tajer.png',
+      "unified gamer identity layer that connects your fragmented gaming life across platforms. It's not a new social network, but a meta-network that brings together what you play, who you play with, and where you belong — all in one place.",
+    technologies: ['Next.js', 'PostgreSQL', 'Supabase', 'Tailwind CSS'],
+    image: '/prj-placeholder.png',
     github: '#',
-    live: 'https://tajer-jo.com/en',
-    category: 'backend',
+    live: '#',
+    category: 'fullstack',
     featured: true,
-    status: 'completed',
+    status: 'in-progress',
     private: true,
   },
   {
@@ -57,16 +57,16 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    title: 'Dazen',
+    title: 'Tajer',
     description:
-      "unified gamer identity layer that connects your fragmented gaming life across platforms. It's not a new social network, but a meta-network that brings together what you play, who you play with, and where you belong — all in one place.",
-    technologies: ['Next.js', 'PostgreSQL', 'Supabase', 'Tailwind CSS'],
-    image: '/prj-placeholder.png',
+      'A full-stack typing speed test application with real-time WPM calculation, accuracy tracking, and user statistics.',
+    technologies: ['Hono.js', 'D1 Database', 'Cloudflare', 'Restful API'],
+    image: '/projects/Tajer.png',
     github: '#',
     live: '#',
-    category: 'fullstack',
+    category: 'backend',
     featured: false,
-    status: 'in-progress',
+    status: 'completed',
     private: true,
   },
 ];
