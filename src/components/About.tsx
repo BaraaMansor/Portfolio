@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { motion } from 'framer-motion';
 
 const About = () => {
   const skills = [
@@ -42,13 +41,9 @@ const About = () => {
   }, []);
 
   return (
-    <motion.section
+    <section
       id="about"
       className="py-20 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true, margin: '-100px' }}
     >
       {/* Background Elements - CSS animations only */}
       <div className="absolute inset-0 overflow-hidden">
@@ -59,27 +54,15 @@ const About = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16 animate-slide-up">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               About <span className="gradient-text">Me</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full"></div>
-          </motion.div>
+          </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              className="space-y-6 glass-card"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
+            <div className="space-y-6 glass-card animate-slide-left delay-200">
               <p className="text-lg text-muted leading-relaxed">
                 Hi! I'm <span className="gradient-text">Al-Baraa</span>, a
                 passionate full-stack developer with a love for creating
@@ -100,28 +83,19 @@ const About = () => {
                 or sharing knowledge with the developer community by making
                 courses and content.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="space-y-6"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
+            <div className="space-y-6 animate-slide-right delay-300">
               <h3 className="text-2xl font-bold text-center lg:text-left mb-8">
                 Skills & Technologies
               </h3>
 
               <div className="space-y-6">
                 {skills.map((skillGroup, index) => (
-                  <motion.div
+                  <div
                     key={skillGroup.category}
-                    className="glass-card p-6 space-y-4"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                    viewport={{ once: true }}
+                    className="glass-card p-6 space-y-4 animate-slide-up"
+                    style={{ animationDelay: `${0.4 + index * 0.1}s` }}
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{skillGroup.icon}</span>
@@ -140,14 +114,14 @@ const About = () => {
                         </span>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

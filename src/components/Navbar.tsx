@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -71,20 +70,18 @@ const Navbar = () => {
   }, []);
 
   return (
-    <motion.nav
+    <nav
       id="site-nav"
-      className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none transition-all duration-300"
-      animate={{ opacity: 1, y: 0 }}
-      initial={{ opacity: 0, y: -12 }}
+      className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none transition-all duration-300 animate-fade-in"
+      style={{ animationDelay: '0.1s', animationFillMode: 'both' }}
     >
       <div className="pointer-events-auto w-full max-w-6xl px-4">
-        <motion.div
+        <div
           className={`rounded-2xl md:rounded-full px-3 md:px-4 py-2.5 md:py-3 flex items-center gap-3 transition-[background-color,transform,backdrop-filter,box-shadow,border-color] duration-300 ${
             isScrolled
               ? 'bg-[rgba(9,10,34,0.82)] border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl'
               : 'bg-transparent border border-transparent shadow-none backdrop-blur-0'
           }`}
-          layout
         >
           <button
             className="flex items-center gap-3 rounded-full px-2 py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))] focus:ring-opacity-70 focus:ring-offset-transparent"
@@ -99,7 +96,7 @@ const Navbar = () => {
               />
             </span>
             <span className="text-sm font-semibold tracking-tight text-foreground hidden sm:inline">
-              Al-Baraa Mansor
+              Al-Baraa Mansour
             </span>
           </button>
 
@@ -240,9 +237,9 @@ const Navbar = () => {
               </SheetContent>
             </Sheet>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 

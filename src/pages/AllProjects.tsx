@@ -1,24 +1,23 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Icon from '@/components/ui/Icon';
 import Footer from '@/components/Footer';
 import { projects, getProjectsByCategory, categories } from '@/data/projects';
 
 const ProjectsPage = () => {
   const [filter, setFilter] = useState('all');
-  const scrollY = useMotionValue(0);
-  const headerHeight = useTransform(scrollY, [0, 100], [80, 60]);
-  const logoSize = useTransform(scrollY, [0, 100], [40, 32]);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      scrollY.set(window.scrollY);
+      const progress = Math.min(window.scrollY / 100, 1);
+      setScrollProgress(progress);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrollY]);
+  }, []);
 
   const filteredProjects = getProjectsByCategory(filter);
 
@@ -56,49 +55,28 @@ const ProjectsPage = () => {
     window.location.href = '/';
   }, []);
 
+  const headerHeight = 80 - scrollProgress * 20;
+  const logoSize = 40 - scrollProgress * 8;
+  const headerBgOpacity = scrollProgress * 0.85;
+  const headerBlur = scrollProgress * 20;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header - same as before */}
-      <motion.header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      <header
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-fade-in"
         style={{
-          height: headerHeight,
-          backgroundColor: useTransform(
-            scrollY,
-            [0, 50],
-            ['rgba(9, 10, 34, 0)', 'rgba(9, 10, 34, 0.85)']
-          ),
-          backdropFilter: useTransform(
-            scrollY,
-            [0, 50],
-            ['blur(0px)', 'blur(20px)']
-          ),
-          borderBottom: useTransform(
-            scrollY,
-            [0, 50],
-            ['1px solid transparent', '1px solid rgba(255, 255, 255, 0.1)']
-          ),
-          boxShadow: useTransform(
-            scrollY,
-            [0, 50],
-            [
-              'none',
-              '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-            ]
-          ),
+          height: `${headerHeight}px`,
+          backgroundColor: `rgba(9, 10, 34, ${headerBgOpacity})`,
+          backdropFilter: `blur(${headerBlur}px)`,
+          borderBottom: scrollProgress > 0.5 ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
+          boxShadow: scrollProgress > 0.5 ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none',
         }}
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
       >
         <div className="container mx-auto px-4 sm:px-6 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Back Button */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <div className="animate-slide-left delay-200">
               <Button
                 variant="ghost"
                 onClick={handleGoBack}
@@ -114,86 +92,53 @@ const ProjectsPage = () => {
                 </span>
                 <span className="sm:hidden font-medium">Back</span>
               </Button>
-            </motion.div>
+            </div>
 
             {/* Logo */}
-            <motion.div
-              className="flex items-center"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <motion.img
+            <div className="flex items-center animate-slide-right delay-300">
+              <img
                 src="/myLogoGold.svg"
                 alt="Logo"
-                className="object-contain"
+                className="object-contain transition-all duration-300"
                 style={{
-                  width: logoSize,
-                  height: logoSize,
+                  width: `${logoSize}px`,
+                  height: `${logoSize}px`,
                 }}
                 loading="eager"
               />
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       <main style={{ paddingTop: '80px' }}>
-        <motion.section
-          className="py-8 sm:py-12 lg:py-16 relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
+        <section className="py-8 sm:py-12 lg:py-16 relative overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <motion.h2
-                className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 animate-slide-up delay-200">
                 My <span className="gradient-text">Projects</span>
-              </motion.h2>
-              <motion.p
-                className="text-base sm:text-lg lg:text-xl text-muted max-w-2xl mx-auto mb-6 sm:mb-8 px-4"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
+              </h2>
+              <p className="text-base sm:text-lg lg:text-xl text-muted max-w-2xl mx-auto mb-6 sm:mb-8 px-4 animate-slide-up delay-300">
                 A collection of projects showcasing my skills in web development
                 and software engineering. Each project represents a unique
                 challenge and learning experience.
-              </motion.p>
-              <motion.div
-                className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full"
-                initial={{ opacity: 0, scaleX: 0 }}
-                animate={{ opacity: 1, scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              />
+              </p>
+              <div className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full animate-fade-in delay-500" />
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* Projects Section - Using centralized data */}
         <section className="py-8 sm:py-12 lg:py-16">
           <div className="container mx-auto px-4 sm:px-6">
-            <motion.div
-              className="text-center mb-8 sm:mb-12"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+            <div className="text-center mb-8 sm:mb-12">
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 {categories.map((category, index) => (
-                  <motion.div
+                  <div
                     key={category}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    viewport={{ once: true }}
+                    className="animate-slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <Button
                       variant={filter === category ? 'default' : 'outline'}
@@ -207,25 +152,18 @@ const ProjectsPage = () => {
                     >
                       {category === 'all' ? 'All' : category}
                     </Button>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
               {filteredProjects.map((project, index) => (
-                <motion.div
+                <div
                   key={project.id}
-                  className="group"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: index * 0.1,
-                  }}
-                  viewport={{ once: true }}
-                  layout
+                  className="group animate-slide-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
                     {/* Project Image */}
@@ -350,21 +288,16 @@ const ProjectsPage = () => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {filteredProjects.length === 0 && (
-              <motion.div
-                className="text-center py-16"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <div className="text-center py-16 animate-fade-in">
                 <p className="text-muted text-lg">
                   No projects found in this category.
                 </p>
-              </motion.div>
+              </div>
             )}
           </div>
         </section>

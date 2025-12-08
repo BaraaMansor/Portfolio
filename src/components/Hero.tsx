@@ -1,11 +1,18 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useMotionValue, useTransform, motion } from 'framer-motion';
 
 const Hero = () => {
-  const scrollY = useMotionValue(0);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const progress = Math.min(window.scrollY / 300, 1);
+      setScrollProgress(progress);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToProjects = useCallback(() => {
     const element = document.getElementById('projects');
@@ -22,12 +29,12 @@ const Hero = () => {
   }, []);
 
   return (
-    <motion.section
+    <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden transition-all duration-300"
       style={{
-        opacity,
-        scale,
+        opacity: 1 - scrollProgress,
+        transform: `scale(${1 - scrollProgress * 0.2})`,
       }}
     >
       {/* Animated background elements - use CSS animations instead of JS */}
@@ -98,7 +105,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

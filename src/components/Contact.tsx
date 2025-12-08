@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import Icon from '@/components/ui/Icon';
 
 const Contact = () => {
@@ -98,13 +97,9 @@ const Contact = () => {
   ];
 
   return (
-    <motion.section
+    <section
       id="contact"
       className="py-8 sm:py-12 lg:py-20 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true, margin: '-100px' }}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -115,13 +110,7 @@ const Contact = () => {
       <div className="w-full px-3 sm:px-6 lg:px-8 relative z-10">
         <div className="w-full max-w-none sm:max-w-6xl sm:mx-auto">
           {/* Section Header */}
-          <motion.div
-            className="text-center mb-8 sm:mb-12 lg:mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16 animate-slide-up">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
               Get In <span className="gradient-text">Touch</span>
             </h2>
@@ -130,17 +119,11 @@ const Contact = () => {
               ideas to life!
             </p>
             <div className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-3 sm:mt-4 lg:mt-6"></div>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
             {/* Contact Info Card */}
-            <motion.div
-              className="w-full"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
+            <div className="w-full animate-slide-left delay-200">
               <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
                   Contact Information
@@ -231,16 +214,10 @@ const Contact = () => {
                   </Button>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Social Links */}
-            <motion.div
-              className="w-full"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
+            <div className="w-full animate-slide-right delay-300">
               <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
                   Let's Connect
@@ -284,11 +261,11 @@ const Contact = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

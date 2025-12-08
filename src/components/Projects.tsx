@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import Icon from '@/components/ui/Icon';
 import { getFeaturedProjects } from '@/data/projects';
 
@@ -13,13 +12,9 @@ const Projects = () => {
   }, []);
 
   return (
-    <motion.section
+    <section
       id="projects"
       className="py-20 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true, margin: '-100px' }}
     >
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
@@ -29,13 +24,7 @@ const Projects = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16 animate-slide-up">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Featured <span className="gradient-text">Projects</span>
             </h2>
@@ -44,22 +33,15 @@ const Projects = () => {
               passion for development.
             </p>
             <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-6"></div>
-          </motion.div>
+          </div>
 
           {/* Projects Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {featuredProjects.map((project, index) => (
-              <motion.div
+              <div
                 key={project.id}
-                className="group"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.2,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                viewport={{ once: true, margin: '-50px' }}
+                className="group animate-slide-up"
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {/* Project Card */}
                 <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
@@ -166,18 +148,12 @@ const Projects = () => {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* View All Projects Button */}
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center animate-slide-up delay-500">
             <div className="relative inline-block">
               <div className="absolute inset-0 bg-gradient-accent rounded-lg blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
               <Button
@@ -194,10 +170,10 @@ const Projects = () => {
                 />
               </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 
