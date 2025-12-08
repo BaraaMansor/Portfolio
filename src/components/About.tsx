@@ -41,10 +41,7 @@ const About = () => {
   }, []);
 
   return (
-    <section
-      id="about"
-      className="py-20 relative overflow-hidden"
-    >
+    <section id="about" className="py-20 relative overflow-hidden">
       {/* Background Elements - CSS animations only */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>

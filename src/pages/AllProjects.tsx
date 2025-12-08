@@ -69,8 +69,14 @@ const ProjectsPage = () => {
           height: `${headerHeight}px`,
           backgroundColor: `rgba(9, 10, 34, ${headerBgOpacity})`,
           backdropFilter: `blur(${headerBlur}px)`,
-          borderBottom: scrollProgress > 0.5 ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
-          boxShadow: scrollProgress > 0.5 ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none',
+          borderBottom:
+            scrollProgress > 0.5
+              ? '1px solid rgba(255, 255, 255, 0.1)'
+              : '1px solid transparent',
+          boxShadow:
+            scrollProgress > 0.5
+              ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+              : 'none',
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 h-full">

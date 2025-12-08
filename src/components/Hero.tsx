@@ -9,7 +9,7 @@ const Hero = () => {
       const progress = Math.min(window.scrollY / 300, 1);
       setScrollProgress(progress);
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
