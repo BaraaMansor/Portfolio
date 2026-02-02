@@ -50,10 +50,10 @@ const Hero = () => {
             <div className="w-40 h-40 mx-auto mb-8 relative">
               <div className="absolute inset-0 bg-gradient-accent rounded-full blur-lg opacity-50 animate-pulse-glow"></div>
               <img
-                src="/my-image.png"
+                src="/my-image.JPG"
                 alt="Al-Baraa Mansour"
-                width={160}
-                height={160}
+                width={200}
+                height={200}
                 className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-xs"
               />
             </div>

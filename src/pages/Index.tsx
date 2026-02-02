@@ -20,13 +20,13 @@ const Index = () => {
         }
       });
     },
-    []
+    [],
   );
 
   useEffect(() => {
     // Preload critical images
     const preloadImages = () => {
-      const criticalImages = ['/my-image.png', '/myLogoGold.svg'];
+      const criticalImages = ['/my-image.JPG', '/myLogoGold.svg'];
       criticalImages.forEach(src => {
         const img = new Image();
         img.src = src;
@@ -44,7 +44,7 @@ const Index = () => {
 
         const observer = new IntersectionObserver(
           handleIntersection,
-          observerOptions
+          observerOptions,
         );
 
         const animatedElements = document.querySelectorAll('[data-animate]');
@@ -92,7 +92,6 @@ const Index = () => {
         <Projects />
         <Contact />
       </main>
-
 
       <Footer />
     </div>
