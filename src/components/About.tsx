@@ -47,6 +47,9 @@ const About = () => {
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className={`text-center mb-16 ${cls('animate-slide-up')}`}>
+            <p className="text-xs font-mono text-primary/50 tracking-[0.25em] uppercase mb-4">
+              01 / About
+            </p>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               About <span className="gradient-text">Me</span>
             </h2>
@@ -108,7 +111,7 @@ const About = () => {
                       {skillGroup.technologies.map(tech => (
                         <span
                           key={tech}
-                          className="px-3 py-1 text-sm bg-surface/50 text-foreground rounded-full border border-glass-border hover:border-primary/50 transition-colors"
+                          className="px-3 py-1 text-sm bg-surface/50 text-foreground rounded-full border border-glass-border hover:border-primary/50 hover:text-primary hover:shadow-[0_0_10px_rgba(255,229,161,0.18)] transition-all cursor-default"
                         >
                           {tech}
                         </span>

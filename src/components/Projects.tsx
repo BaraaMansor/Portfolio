@@ -4,13 +4,19 @@ import Icon from '@/components/ui/Icon';
 import { getFeaturedProjects } from '@/data/projects';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
+const categoryLabel: Record<string, string> = {
+  fullstack: 'Full-Stack',
+  frontend: 'Frontend',
+  backend: 'Backend',
+  mobile: 'Mobile',
+};
+
 const Projects = () => {
   const featuredProjects = getFeaturedProjects();
   const { ref, visible } = useScrollReveal();
   const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
 
   const handleViewAllProjects = useCallback(() => {
-    // Navigate to projects page
     window.location.href = '/projects';
   }, []);
 
@@ -28,6 +34,9 @@ const Projects = () => {
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className={`text-center mb-16 ${cls('animate-slide-up')}`}>
+            <p className="text-xs font-mono text-primary/50 tracking-[0.25em] uppercase mb-4">
+              02 / Projects
+            </p>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Featured <span className="gradient-text">Projects</span>
             </h2>
@@ -46,12 +55,11 @@ const Projects = () => {
                 className={`group ${cls('animate-slide-up')}`}
                 style={visible ? { animationDelay: `${index * 0.15}s` } : undefined}
               >
-                {/* Project Card */}
-                <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
-                  {/* Featured Badge */}
+                <div className="glass-card h-full flex flex-col overflow-hidden relative group-hover:scale-[1.02] group-hover:shadow-[0_16px_48px_rgba(255,229,161,0.12)] transition-all duration-500">
+                  {/* Category Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     <span className="px-2 py-1 text-xs bg-gradient-accent text-primary-foreground rounded-full font-medium">
-                      Featured
+                      {categoryLabel[project.category] ?? project.category}
                     </span>
                   </div>
 
@@ -69,9 +77,27 @@ const Projects = () => {
                   {/* Project Content */}
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold mb-3 gradient-text group-hover:text-primary transition-colors">
-                        {project.title}
-                      </h3>
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-xl font-bold gradient-text">
+                          {project.title}
+                        </h3>
+                      </div>
+
+                      {/* Status indicator */}
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                            project.status === 'completed'
+                              ? 'bg-green-400'
+                              : 'bg-yellow-400'
+                          }`}
+                        />
+                        <span className="text-xs text-muted capitalize">
+                          {project.status === 'in-progress'
+                            ? 'In Progress'
+                            : 'Completed'}
+                        </span>
+                      </div>
 
                       <p className="text-muted leading-relaxed mb-4 text-sm">
                         {project.description}
@@ -92,7 +118,6 @@ const Projects = () => {
 
                     {/* Project Links */}
                     <div className="flex gap-3 mt-auto">
-                      {/* Conditionally render Code button only for non-private projects */}
                       {!project.private && (
                         <Button
                           variant="outline"
@@ -116,15 +141,12 @@ const Projects = () => {
                         </Button>
                       )}
 
-                      {/* Live button - spans full width if project is private */}
                       {project.live !== '#' && (
                         <Button
                           variant="default"
                           size="sm"
                           asChild
-                          className={`${
-                            project.private ? 'flex-1' : 'flex-1'
-                          } bg-gradient-accent hover:bg-gradient-accent/90 group relative`}
+                          className="flex-1 bg-gradient-accent hover:bg-gradient-accent/90 group relative"
                         >
                           <a
                             href={project.live}

@@ -116,6 +116,9 @@ const Contact = () => {
         <div className="w-full max-w-none sm:max-w-6xl sm:mx-auto">
           {/* Section Header */}
           <div className={`text-center mb-8 sm:mb-12 lg:mb-16 ${cls('animate-slide-up')}`}>
+            <p className="text-xs font-mono text-primary/50 tracking-[0.25em] uppercase mb-4">
+              03 / Contact
+            </p>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
               Get In <span className="gradient-text">Touch</span>
             </h2>

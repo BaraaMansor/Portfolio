@@ -21,7 +21,17 @@ const Hero = () => {
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* Animated background elements - use CSS animations instead of JS */}
+      {/* Subtle dot grid */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, rgba(255,229,161,0.045) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-20 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-300"></div>
@@ -48,9 +58,9 @@ const Hero = () => {
 
           <h1
             className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up"
-            style={{ animationDelay: '0.3s' }}
+            style={{ animationDelay: '0.35s' }}
           >
-            <span className="gradient-text">Al-Baraa</span>
+            <span className="gradient-text-animated">Al-Baraa</span>
           </h1>
 
           <h2
@@ -102,6 +112,27 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <button
+        onClick={scrollToProjects}
+        aria-label="Scroll to projects"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-scroll-hint text-primary focus:outline-none"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
     </section>
   );
 };

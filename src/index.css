@@ -111,6 +111,15 @@
   background-clip: text;
 }
 
+@utility gradient-text-animated {
+  background: var(--gradient-accent);
+  background-size: 200% auto;
+  animation: gradient-flow 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @utility animated-gradient {
   /* Animated gradient background */
   background: var(--gradient-accent);
@@ -159,6 +168,10 @@
 
 @utility animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@utility animate-scroll-hint {
+  animation: scrollHint 1.8s ease-in-out infinite;
 }
 
 @utility delay-100 {
@@ -390,6 +403,18 @@ All colors MUST be HSL.
     }
     50% {
       box-shadow: 0 0 40px hsl(var(--primary) / 0.8);
+    }
+  }
+
+  @keyframes scrollHint {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.45;
+    }
+    50% {
+      transform: translateY(6px);
+      opacity: 0.85;
     }
   }
 
