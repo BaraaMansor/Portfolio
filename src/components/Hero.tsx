@@ -37,41 +37,41 @@ const Hero = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-300"></div>
       </div>
 
-      <div className="container mx-auto px-6 pt-12 text-center relative z-10">
+      <div className="container mx-auto px-6 pt-16 pb-20 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Profile Image */}
           <div
-            className="mb-8 animate-fade-in"
+            className="mb-6 animate-fade-in"
             style={{ animationDelay: '0.1s' }}
           >
-            <div className="w-40 h-40 mx-auto mb-8 relative">
+            <div className="w-32 h-32 mx-auto mb-6 relative">
               <div className="absolute inset-0 bg-gradient-accent rounded-full blur-lg opacity-50 animate-pulse-glow"></div>
               <img
                 src="/my-image.JPG"
                 alt="Al-Baraa Mansour"
-                width={200}
-                height={200}
+                width={160}
+                height={160}
                 className="relative w-full h-full object-cover rounded-full border-4 border-glass-border glass backdrop-blur-xs"
               />
             </div>
           </div>
 
           <h1
-            className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up"
-            style={{ animationDelay: '0.35s' }}
+            className="text-5xl md:text-7xl font-bold mb-5 animate-slide-up"
+            style={{ animationDelay: '0.3s' }}
           >
             <span className="gradient-text-animated">Al-Baraa</span>
           </h1>
 
           <h2
-            className="text-2xl md:text-4xl font-semibold text-muted mb-6 animate-slide-up"
+            className="text-xl md:text-3xl font-semibold text-muted mb-5 animate-slide-up"
             style={{ animationDelay: '0.5s' }}
           >
             Full-stack Web Developer
           </h2>
 
           <p
-            className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-up"
+            className="text-base md:text-lg text-muted max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up"
             style={{ animationDelay: '0.65s' }}
           >
             Creating responsive websites for different markets, providing
@@ -81,12 +81,12 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-20 animate-slide-up"
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-slide-up"
             style={{ animationDelay: '0.8s' }}
           >
             <Button
               variant="hero"
-              size="xl"
+              size="lg"
               onClick={scrollToProjects}
               className="group"
             >
@@ -106,7 +106,7 @@ const Hero = () => {
               </svg>
             </Button>
 
-            <Button variant="glass" size="xl" onClick={scrollToContact}>
+            <Button variant="glass" size="lg" onClick={scrollToContact}>
               Get In Touch
             </Button>
           </div>
@@ -117,7 +117,7 @@ const Hero = () => {
       <button
         onClick={scrollToProjects}
         aria-label="Scroll to projects"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-scroll-hint text-primary focus:outline-none"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-scroll-hint text-primary focus:outline-none"
       >
         <svg
           className="w-6 h-6"
