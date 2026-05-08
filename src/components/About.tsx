@@ -1,60 +1,52 @@
 import { useCallback } from 'react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const About = () => {
+  const { ref, visible } = useScrollReveal();
+  const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
+
   const skills = [
     {
       category: 'Frontend',
       technologies: [
-        'JavaScript',
-        'TypeScript',
+        'Angular',
         'React',
         'Next.js',
+        'TypeScript',
+        'JavaScript',
         'Tailwind CSS',
-        'Framer Motion',
+        'Sass',
+        'HTML',
       ],
       icon: '🎨',
     },
     {
       category: 'Backend',
-      technologies: [
-        'Node.js',
-        'Express.js',
-        'Hono.js',
-        'Python',
-        'C#',
-        'ASP.NET',
-        '.NET',
-        'SQL',
-        'Restful API',
-      ],
+      technologies: ['C#', '.NET', 'SQL', 'Node.js', 'Restful API'],
       icon: '⚙️',
     },
     {
       category: 'Tools & Others',
-      technologies: ['Git', 'Cloudflare', 'Figma'],
+      technologies: ['Git', 'Cloudflare', 'Figma', 'Docker'],
       icon: '🛠️',
     },
   ];
 
-  const scrollToContact = useCallback(() => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, []);
-
   return (
-    <section id="about" className="py-20 relative overflow-hidden">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      id="about"
+      className="py-20 relative overflow-hidden"
+    >
       {/* Background Elements - CSS animations only */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-gradient-accent opacity-3 rounded-full blur-3xl animate-float delay-700"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16 animate-slide-up">
+          <div className={`text-center mb-16 ${cls('animate-slide-up')}`}>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               About <span className="gradient-text">Me</span>
             </h2>
@@ -62,7 +54,9 @@ const About = () => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 glass-card animate-slide-left delay-200">
+            <div
+              className={`space-y-6 glass-card ${cls('animate-slide-left delay-200')}`}
+            >
               <p className="text-lg text-muted leading-relaxed">
                 Hi! I'm <span className="gradient-text">Al-Baraa</span>, a
                 passionate full-stack developer with a love for creating
@@ -85,7 +79,9 @@ const About = () => {
               </p>
             </div>
 
-            <div className="space-y-6 animate-slide-right delay-300">
+            <div
+              className={`space-y-6 ${cls('animate-slide-right delay-300')}`}
+            >
               <h3 className="text-2xl font-bold text-center lg:text-left mb-8">
                 Skills & Technologies
               </h3>
@@ -94,8 +90,12 @@ const About = () => {
                 {skills.map((skillGroup, index) => (
                   <div
                     key={skillGroup.category}
-                    className="glass-card p-6 space-y-4 animate-slide-up"
-                    style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+                    className={`glass-card p-6 space-y-4 ${cls('animate-slide-up')}`}
+                    style={
+                      visible
+                        ? { animationDelay: `${0.4 + index * 0.1}s` }
+                        : undefined
+                    }
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{skillGroup.icon}</span>

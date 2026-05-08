@@ -2,9 +2,12 @@ import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/Icon';
 import { getFeaturedProjects } from '@/data/projects';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const Projects = () => {
   const featuredProjects = getFeaturedProjects();
+  const { ref, visible } = useScrollReveal();
+  const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
 
   const handleViewAllProjects = useCallback(() => {
     // Navigate to projects page
@@ -12,16 +15,19 @@ const Projects = () => {
   }, []);
 
   return (
-    <section id="projects" className="py-20 relative overflow-hidden">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      id="projects"
+      className="py-20 relative overflow-hidden"
+    >
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-float delay-500"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16 animate-slide-up">
+          <div className={`text-center mb-16 ${cls('animate-slide-up')}`}>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Featured <span className="gradient-text">Projects</span>
             </h2>
@@ -37,8 +43,8 @@ const Projects = () => {
             {featuredProjects.map((project, index) => (
               <div
                 key={project.id}
-                className="group animate-slide-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className={`group ${cls('animate-slide-up')}`}
+                style={visible ? { animationDelay: `${index * 0.15}s` } : undefined}
               >
                 {/* Project Card */}
                 <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
@@ -150,7 +156,7 @@ const Projects = () => {
           </div>
 
           {/* View All Projects Button */}
-          <div className="text-center animate-slide-up delay-500">
+          <div className={`text-center ${cls('animate-slide-up delay-500')}`}>
             <div className="relative inline-block">
               <div className="absolute inset-0 bg-gradient-accent rounded-lg blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
               <Button

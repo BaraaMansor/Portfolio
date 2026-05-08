@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/Icon';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const Contact = () => {
   const [currentTime, setCurrentTime] = useState('');
+  const { ref, visible } = useScrollReveal();
+  const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
 
   useEffect(() => {
     const updateTime = () => {
@@ -26,10 +29,12 @@ const Contact = () => {
 
   const getAvailabilityStatus = () => {
     const now = new Date();
-    const currentHour = now.getHours();
+    // Use Jordan/Amman local hour, not the visitor's local hour
+    const jordanHour = new Date(
+      now.toLocaleString('en-US', { timeZone: 'Asia/Amman' })
+    ).getHours();
 
-    // Available 8 AM to 9 PM
-    if (currentHour >= 8 && currentHour < 21) {
+    if (jordanHour >= 8 && jordanHour < 21) {
       return {
         status: 'Available',
         color: 'text-green-400',
@@ -98,19 +103,19 @@ const Contact = () => {
 
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="contact"
       className="py-8 sm:py-12 lg:py-20 relative overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/3 right-1/3 w-64 h-64 bg-gradient-accent opacity-8 rounded-full blur-3xl animate-float delay-1000"></div>
       </div>
 
       <div className="w-full px-3 sm:px-6 lg:px-8 relative z-10">
         <div className="w-full max-w-none sm:max-w-6xl sm:mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16 animate-slide-up">
+          <div className={`text-center mb-8 sm:mb-12 lg:mb-16 ${cls('animate-slide-up')}`}>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
               Get In <span className="gradient-text">Touch</span>
             </h2>
@@ -123,7 +128,7 @@ const Contact = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
             {/* Contact Info Card */}
-            <div className="w-full animate-slide-left delay-200">
+            <div className={`w-full ${cls('animate-slide-left delay-200')}`}>
               <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
                   Contact Information
@@ -162,7 +167,7 @@ const Contact = () => {
 
                 {/* Contact Details */}
                 <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                  {contactInfo.map((info, index) => (
+                  {contactInfo.map((info) => (
                     <div
                       key={info.label}
                       className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 bg-surface/20 rounded-lg border border-glass-border hover:border-primary/50 transition-all group"
@@ -217,7 +222,7 @@ const Contact = () => {
             </div>
 
             {/* Social Links */}
-            <div className="w-full animate-slide-right delay-300">
+            <div className={`w-full ${cls('animate-slide-right delay-300')}`}>
               <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
                   Let's Connect
@@ -229,7 +234,7 @@ const Contact = () => {
                 </p>
 
                 <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                  {socialLinks.map((link, index) => (
+                  {socialLinks.map((link) => (
                     <a
                       key={link.name}
                       href={link.url}
