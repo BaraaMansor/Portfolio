@@ -30,16 +30,17 @@ export const projects: Project[] = [
   },
   {
     id: 2,
-    title: 'TrackTide',
+    title: 'Lancul',
     description:
-      'TrackTide is a beautifully designed, habit tracker that helps you build better habits—no login required. Effortlessly add, track, and complete your daily goals.  making it easier to stay motivated and consistent.',
-    technologies: ['React', 'Tailwind', 'TypeScript', 'Vite'],
-    image: '/projects/TrackTide.png',
-    github: 'https://github.com/BaraaMansor/TrackTide',
-    live: 'https://tracktide.pages.dev/',
-    category: 'frontend',
+      'LanCul is a platform where you can find your local guide who can speaks your language on demand in anywhere anytime',
+    technologies: ['.NET', 'SqlServer', 'Docker'],
+    image: '/projects/Lancul.png',
+    github: '#',
+    live: 'https://lancul.net/',
+    category: 'backend',
     featured: true,
     status: 'completed',
+    private: true,
   },
   {
     id: 3,
@@ -49,7 +50,7 @@ export const projects: Project[] = [
     technologies: ['Next.js', 'TypeScript', 'Tailwind', 'ShadCN', 'Asp.net'],
     image: '/projects/ECampus.png',
     github: '#',
-    live: 'https://ecampusjo.com/en',
+    live: 'https://ecampusjo.com/',
     category: 'fullstack',
     featured: true,
     status: 'in-progress',
@@ -68,6 +69,19 @@ export const projects: Project[] = [
     featured: false,
     status: 'completed',
     private: true,
+  },
+  {
+    id: 5,
+    title: 'TrackTide',
+    description:
+      'TrackTide is a beautifully designed, habit tracker that helps you build better habits—no login required. Effortlessly add, track, and complete your daily goals.  making it easier to stay motivated and consistent.',
+    technologies: ['React', 'Tailwind', 'TypeScript', 'Vite'],
+    image: '/projects/TrackTide.png',
+    github: 'https://github.com/BaraaMansor/TrackTide',
+    live: 'https://tracktide.pages.dev/',
+    category: 'frontend',
+    featured: false,
+    status: 'completed',
   },
 ];
 

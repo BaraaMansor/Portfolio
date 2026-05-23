@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const About = () => {
