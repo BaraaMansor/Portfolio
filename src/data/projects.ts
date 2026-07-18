@@ -16,13 +16,13 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
-    title: 'Dazen',
+    title: 'Echelon',
     description:
-      "unified gamer identity layer that connects your fragmented gaming life across platforms. It's not a new social network, but a meta-network that brings together what you play, who you play with, and where you belong — all in one place.",
+      'An online gamified platform for task management and productivity, designed to help users stay organized and motivated while completing  with their friends in the guild, and aganist other guilds',
     technologies: ['Next.js', 'PostgreSQL', 'Supabase', 'Tailwind CSS'],
-    image: '/prj-placeholder.png',
+    image: '/projects/echelon-front.png',
     github: '#',
-    live: '#',
+    live: 'https://echelon-sigma-five.vercel.app/invite/IGM214XE',
     category: 'fullstack',
     featured: true,
     status: 'in-progress',
@@ -53,11 +53,39 @@ export const projects: Project[] = [
     live: 'https://ecampusjo.com/',
     category: 'fullstack',
     featured: true,
-    status: 'in-progress',
+    status: 'completed',
     private: true,
   },
   {
     id: 4,
+    title: 'Dazen',
+    description:
+      "unified gamer identity layer that connects your fragmented gaming life across platforms. It's not a new social network, but a meta-network that brings together what you play, who you play with, and where you belong — all in one place.",
+    technologies: ['Next.js', 'PostgreSQL', 'Supabase', 'Tailwind CSS'],
+    image: '/prj-placeholder.png',
+    github: '#',
+    live: '#',
+    category: 'fullstack',
+    featured: false,
+    status: 'in-progress',
+    private: true,
+  },
+  {
+    id: 5,
+    title: 'Unlimited Innovation Landing Page',
+    description:
+      'A landing page demo for Unlimited Innovation, showcasing their services and offerings in a visually appealing and user-friendly manner.',
+    technologies: ['React', 'Tailwind', 'TypeScript', 'Vite'],
+    image: '/projects/ui-landing.png',
+    github: '#',
+    live: 'unlimited-innovation.pages.dev',
+    category: 'backend',
+    featured: false,
+    status: 'completed',
+    private: true,
+  },
+  {
+    id: 6,
     title: 'Tajer',
     description:
       'A full-stack typing speed test application with real-time WPM calculation, accuracy tracking, and user statistics.',
@@ -71,7 +99,7 @@ export const projects: Project[] = [
     private: true,
   },
   {
-    id: 5,
+    id: 7,
     title: 'TrackTide',
     description:
       'TrackTide is a beautifully designed, habit tracker that helps you build better habits—no login required. Effortlessly add, track, and complete your daily goals.  making it easier to stay motivated and consistent.',
