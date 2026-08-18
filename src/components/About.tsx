@@ -1,124 +1,118 @@
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import Glyphs from '@/components/Glyphs';
+import ScrambleText from '@/components/ScrambleText';
+
+const aboutGlyphs = [
+  { char: '( )', top: '12%', right: '5%', size: '2.1rem', speed: 0.2, phase: 8, opacity: 0.11 },
+  { char: '*', top: '28%', left: '3%', size: '2.6rem', speed: 0.28, opacity: 0.09, serif: true, hideMobile: true },
+  { char: '✦', top: '6%', right: '30%', size: '1rem', speed: -0.24, opacity: 0.14 },
+  { char: '&&', top: '74%', left: '44%', size: '1.4rem', speed: -0.22, phase: -12, opacity: 0.1, hideMobile: true },
+  { char: '!', top: '86%', right: '8%', size: '1.8rem', speed: 0.26, phase: -14, opacity: 0.11, serif: true },
+  { char: '~', top: '48%', right: '2%', size: '2rem', speed: -0.18, phase: 22, opacity: 0.09, hideMobile: true },
+  { char: '%', top: '60%', left: '1%', size: '1.5rem', speed: 0.24, phase: 40, opacity: 0.09, hideMobile: true },
+];
+
+const skillGroups = [
+  {
+    category: 'Frontend',
+    technologies: [
+      'React',
+      'Next.js',
+      'Angular',
+      'TypeScript',
+      'Tailwind CSS',
+      'Sass',
+    ],
+  },
+  {
+    category: 'Backend',
+    technologies: ['C#', '.NET', 'Node.js', 'SQL', 'REST APIs'],
+  },
+  {
+    category: 'Tools',
+    technologies: ['Git', 'Docker', 'Cloudflare', 'Figma'],
+  },
+];
 
 const About = () => {
   const { ref, visible } = useScrollReveal();
-  const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
-
-  const skills = [
-    {
-      category: 'Frontend',
-      technologies: [
-        'Angular',
-        'React',
-        'Next.js',
-        'TypeScript',
-        'JavaScript',
-        'Tailwind CSS',
-        'Sass',
-        'HTML',
-      ],
-      icon: '🎨',
-    },
-    {
-      category: 'Backend',
-      technologies: ['C#', '.NET', 'SQL', 'Node.js', 'Restful API'],
-      icon: '⚙️',
-    },
-    {
-      category: 'Tools & Others',
-      technologies: ['Git', 'Cloudflare', 'Figma', 'Docker'],
-      icon: '🛠️',
-    },
-  ];
+  const inClass = visible ? 'is-in' : '';
 
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
       id="about"
-      className="py-20 relative overflow-hidden"
+      className="relative scroll-mt-20 overflow-hidden py-16 md:py-24"
     >
-      {/* Background Elements - CSS animations only */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
-      </div>
+      <Glyphs items={aboutGlyphs} />
+      <div className="container-page relative">
+        <ScrambleText
+          text="01 / About"
+          active={visible}
+          className={`text-label reveal ${inClass}`}
+        />
+        <h2
+          className={`font-display mt-4 max-w-2xl text-[clamp(2rem,4.5vw,3.2rem)] reveal ${inClass}`}
+          style={{ transitionDelay: '90ms' }}
+        >
+          A developer who cares how it{' '}
+          <em className="accent-italic">feels</em>.
+        </h2>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          {/* Section Header */}
-          <div className={`text-center mb-16 ${cls('animate-slide-up')}`}>
-            <p className="text-xs font-mono text-primary/50 tracking-[0.25em] uppercase mb-4">
-              01 / About
+        <div className="mt-10 grid gap-10 md:grid-cols-12">
+          <div
+            className={`space-y-5 text-lg leading-relaxed text-muted md:col-span-7 reveal ${inClass}`}
+            style={{ transitionDelay: '180ms' }}
+          >
+            <p className="text-foreground">
+              Hi, I'm Al-Baraa. I build web products end to end, from the
+              database schema to the last hover state, and I hold both ends to
+              the same standard: it should work beautifully, and it should feel
+              instant.
             </p>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              About <span className="gradient-text">Me</span>
-            </h2>
-            <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full"></div>
+            <p>
+              What started as curiosity turned into a craft. These days I split
+              my time between client work, my own products, and sharing what I
+              learn with the developer community through courses and content.
+            </p>
+            <p>
+              I treat slow software as a design flaw. This site ships no
+              animation libraries and no heavy frameworks for effects. What
+              you're feeling right now is just careful engineering.
+            </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div
-              className={`space-y-6 glass-card ${cls('animate-slide-left delay-200')}`}
-            >
-              <p className="text-lg text-muted leading-relaxed">
-                Hi! I'm <span className="gradient-text">Al-Baraa</span>, a
-                passionate full-stack developer with a love for creating
-                innovative web solutions. I specialize in modern web
-                technologies and enjoy bringing ideas to life through clean,
-                efficient code.
-              </p>
-
-              <p className="text-lg text-muted leading-relaxed">
-                My journey in web development started with curiosity and has
-                evolved into a passion for building user-friendly applications
-                that make a difference. I'm always eager to learn new
-                technologies and tackle challenging problems.
-              </p>
-
-              <p className="text-lg text-muted leading-relaxed">
-                When I'm not coding, you can find me exploring new technologies,
-                or sharing knowledge with the developer community by making
-                courses and content.
-              </p>
-            </div>
-
-            <div
-              className={`space-y-6 ${cls('animate-slide-right delay-300')}`}
-            >
-              <h3 className="text-2xl font-bold text-center lg:text-left mb-8">
-                Skills & Technologies
-              </h3>
-
-              <div className="space-y-6">
-                {skills.map((skillGroup, index) => (
-                  <div
-                    key={skillGroup.category}
-                    className={`glass-card p-6 space-y-4 ${cls('animate-slide-up')}`}
-                    style={
-                      visible
-                        ? { animationDelay: `${0.4 + index * 0.1}s` }
-                        : undefined
-                    }
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{skillGroup.icon}</span>
-                      <h4 className="text-xl font-semibold gradient-text">
-                        {skillGroup.category}
-                      </h4>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {skillGroup.technologies.map(tech => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 text-sm bg-surface/50 text-foreground rounded-full border border-glass-border hover:border-primary/50 hover:text-primary hover:shadow-[0_0_10px_rgba(255,229,161,0.18)] transition-all cursor-default"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+          <div className="md:col-span-5">
+            {skillGroups.map((group, i) => (
+              <div
+                key={group.category}
+                className={`border-t hairline py-6 reveal ${inClass}`}
+                style={{ transitionDelay: `${240 + i * 90}ms` }}
+              >
+                <h3 className="text-label mb-3">{group.category}</h3>
+                <p className="leading-relaxed text-[0.97rem]">
+                  {group.technologies.map((tech, j) => (
+                    <span key={tech}>
+                      {tech}
+                      {j < group.technologies.length - 1 && (
+                        <span className="mx-2 text-gold/40">·</span>
+                      )}
+                    </span>
+                  ))}
+                </p>
               </div>
+            ))}
+            <div
+              className={`border-t border-b hairline py-6 reveal ${inClass}`}
+              style={{ transitionDelay: '510ms' }}
+            >
+              <h3 className="text-label mb-3">Currently</h3>
+              <p className="text-[0.97rem] text-muted">
+                Building{' '}
+                <span className="text-foreground">Echelon</span>, a gamified
+                productivity platform where guilds compete on getting things
+                done.
+              </p>
             </div>
           </div>
         </div>

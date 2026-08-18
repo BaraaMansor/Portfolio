@@ -1,276 +1,106 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import Icon from '@/components/ui/Icon';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useAmmanTime, isAwake } from '@/hooks/useAmmanTime';
+import Glyphs from '@/components/Glyphs';
+import ScrambleText from '@/components/ScrambleText';
+
+const contactGlyphs = [
+  { char: '@', top: '22%', left: '10%', size: '2.8rem', speed: 0.2, phase: -8, opacity: 0.1, serif: true },
+  { char: '✦', top: '12%', right: '14%', size: '1.2rem', speed: -0.24, opacity: 0.14 },
+  { char: '->', top: '60%', right: '8%', size: '1.8rem', speed: 0.24, phase: 12, opacity: 0.1, hideMobile: true },
+  { char: '?', top: '78%', left: '16%', size: '1.7rem', speed: 0.26, phase: -20, opacity: 0.1, serif: true },
+  { char: '&', top: '44%', left: '3%', size: '1.6rem', speed: -0.2, phase: 30, opacity: 0.09, hideMobile: true },
+  { char: ';', top: '84%', right: '20%', size: '2rem', speed: 0.22, opacity: 0.09, serif: true, hideMobile: true },
+];
+
+const socials = [
+  { name: 'GitHub', url: 'https://github.com/BaraaMansor' },
+  { name: 'LinkedIn', url: 'https://linkedin.com/in/baraamansor' },
+  { name: 'YouTube', url: 'https://www.youtube.com/@AlBaraaMansor' },
+  { name: 'Instagram', url: 'https://www.instagram.com/baraadev0_/' },
+  { name: 'WhatsApp', url: 'https://wa.me/962795114124' },
+];
 
 const Contact = () => {
-  const [currentTime, setCurrentTime] = useState('');
   const { ref, visible } = useScrollReveal();
-  const cls = (animClass: string) => (visible ? animClass : 'opacity-0');
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const timeString = now.toLocaleString('en-US', {
-        timeZone: 'Asia/Amman',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-      });
-      setCurrentTime(timeString);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const getAvailabilityStatus = () => {
-    const now = new Date();
-    // Use Jordan/Amman local hour, not the visitor's local hour
-    const jordanHour = new Date(
-      now.toLocaleString('en-US', { timeZone: 'Asia/Amman' })
-    ).getHours();
-
-    if (jordanHour >= 8 && jordanHour < 21) {
-      return {
-        status: 'Available',
-        color: 'text-green-400',
-        dot: 'bg-green-400',
-        message: 'Usually responds within an hour',
-      };
-    } else {
-      return {
-        status: 'Away',
-        color: 'text-yellow-400',
-        dot: 'bg-yellow-400',
-        message: 'Will respond within 24 hours',
-      };
-    }
-  };
-
-  const availability = getAvailabilityStatus();
-
-  const contactInfo = [
-    {
-      label: 'Email',
-      value: 'baraadev0@gmail.com',
-      href: 'mailto:baraadev0@gmail.com',
-      icon: 'email',
-    },
-    {
-      label: 'Phone',
-      value: '+962 79 511 4124',
-      href: 'tel:+962795114124',
-      icon: 'phone',
-    },
-    {
-      label: 'Location',
-      value: 'Amman, Jordan',
-      href: null,
-      icon: 'location',
-    },
-  ];
-
-  const socialLinks = [
-    {
-      name: 'Instagram',
-      url: 'https://instagram.com/baraadev0_',
-      description: 'Connect with me on Instagram',
-      icon: 'instagram',
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://linkedin.com/in/baraamansor',
-      description: 'Connect professionally',
-      icon: 'linkedin',
-    },
-    {
-      name: 'WhatsApp',
-      url: 'https://wa.me/962795114124',
-      description: 'Quick chat',
-      icon: 'whatsapp',
-    },
-    {
-      name: 'GitHub',
-      url: 'https://github.com/BaraaMansor',
-      description: 'Check out my latest activities',
-      icon: 'github',
-    },
-  ];
+  const inClass = visible ? 'is-in' : '';
+  const time = useAmmanTime();
+  const awake = isAwake();
 
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
       id="contact"
-      className="py-8 sm:py-12 lg:py-20 relative overflow-hidden"
+      className="relative scroll-mt-20 overflow-hidden py-20 text-center md:py-28"
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-float"></div>
-      </div>
+      <Glyphs items={contactGlyphs} />
+      <div className="container-page relative">
+        <ScrambleText
+          text="03 / Contact"
+          active={visible}
+          className={`text-label reveal ${inClass}`}
+        />
+        <h2
+          className={`font-display mx-auto mt-4 max-w-3xl text-[clamp(2.2rem,5.5vw,4rem)] reveal ${inClass}`}
+          style={{ transitionDelay: '90ms' }}
+        >
+          Let's build something{' '}
+          <em className="accent-italic">great</em> together.
+        </h2>
+        <p
+          className={`mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted reveal ${inClass}`}
+          style={{ transitionDelay: '180ms' }}
+        >
+          Have a project, a role, or just an idea you want to talk through? My
+          inbox is always open.
+        </p>
 
-      <div className="w-full px-3 sm:px-6 lg:px-8 relative z-10">
-        <div className="w-full max-w-none sm:max-w-6xl sm:mx-auto">
-          {/* Section Header */}
-          <div className={`text-center mb-8 sm:mb-12 lg:mb-16 ${cls('animate-slide-up')}`}>
-            <p className="text-xs font-mono text-primary/50 tracking-[0.25em] uppercase mb-4">
-              03 / Contact
-            </p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
-              Get In <span className="gradient-text">Touch</span>
-            </h2>
-            <p className="text-sm sm:text-lg lg:text-xl text-muted max-w-2xl mx-auto px-2">
-              Ready to start a project together? Let's connect and bring your
-              ideas to life!
-            </p>
-            <div className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full mt-3 sm:mt-4 lg:mt-6"></div>
-          </div>
+        <div
+          className={`mt-10 reveal ${inClass}`}
+          style={{ transitionDelay: '270ms' }}
+        >
+          <a
+            href="mailto:baraadev0@gmail.com"
+            className="link-underlined font-display text-[clamp(1.5rem,4.5vw,2.6rem)]"
+          >
+            baraadev0@gmail.com
+          </a>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-            {/* Contact Info Card */}
-            <div className={`w-full ${cls('animate-slide-left delay-200')}`}>
-              <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
-                  Contact Information
-                </h3>
+        <p
+          className={`mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.18em] text-muted/70 reveal ${inClass}`}
+          style={{ transitionDelay: '360ms' }}
+        >
+          <span className="flex items-center gap-2">
+            <span
+              className={`dot-pulse inline-block h-2 w-2 rounded-full ${
+                awake ? 'bg-emerald-400' : 'bg-gold'
+              }`}
+            />
+            {awake ? 'Available now' : 'Away, replies within 24h'}
+          </span>
+          <span className="text-gold/40">✦</span>
+          <span>Amman, JO · {time}</span>
+          <span className="text-gold/40">✦</span>
+          <a href="tel:+962795114124" className="hover:text-foreground transition-colors">
+            +962 79 511 4124
+          </a>
+        </p>
 
-                {/* Availability Status */}
-                <div className="mb-4 sm:mb-6 lg:mb-8 p-2 sm:p-3 lg:p-4 bg-surface/30 rounded-lg border border-glass-border">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                    <div
-                      className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${availability.dot} animate-pulse`}
-                    ></div>
-                    <span
-                      className={`font-medium text-xs sm:text-sm lg:text-base ${availability.color}`}
-                    >
-                      {availability.status}
-                    </span>
-                  </div>
-                  <p className="text-xs sm:text-sm text-muted">
-                    {availability.message}
-                  </p>
-                </div>
-
-                {/* Local Time */}
-                <div className="mb-4 sm:mb-6 lg:mb-8 p-2 sm:p-3 lg:p-4 bg-surface/30 rounded-lg border border-glass-border">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                    <Icon name="clock" className="text-primary" size={16} />
-                    <span className="font-medium text-xs sm:text-sm lg:text-base">
-                      Local Time
-                    </span>
-                  </div>
-                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">
-                    {currentTime}
-                  </p>
-                  <p className="text-xs sm:text-sm text-muted">GMT+3</p>
-                </div>
-
-                {/* Contact Details */}
-                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                  {contactInfo.map((info) => (
-                    <div
-                      key={info.label}
-                      className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 bg-surface/20 rounded-lg border border-glass-border hover:border-primary/50 transition-all group"
-                    >
-                      <div className="text-primary group-hover:text-primary/80 transition-colors flex-shrink-0">
-                        <Icon
-                          name={info.icon}
-                          className="group-hover:scale-110 transition-transform"
-                          size={16}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs sm:text-sm text-muted">
-                          {info.label}
-                        </p>
-                        {info.href ? (
-                          <a
-                            href={info.href}
-                            className="font-medium text-xs sm:text-sm lg:text-base text-foreground hover:text-primary transition-colors block truncate"
-                          >
-                            {info.value}
-                          </a>
-                        ) : (
-                          <p className="font-medium text-xs sm:text-sm lg:text-base text-foreground truncate">
-                            {info.value}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Quick Contact Button */}
-                <div className="mt-4 sm:mt-6 lg:mt-8">
-                  <Button
-                    variant="hero"
-                    size="sm"
-                    className="w-full group text-xs sm:text-sm lg:text-base h-8 sm:h-10 lg:h-12"
-                    asChild
-                  >
-                    <a href="mailto:baraadev0@gmail.com">
-                      Start a Conversation
-                      <Icon
-                        name="arrow-right"
-                        className="ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform"
-                        size={14}
-                      />
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Links */}
-            <div className={`w-full ${cls('animate-slide-right delay-300')}`}>
-              <div className="glass-card p-3 sm:p-4 lg:p-6 xl:p-8 w-full">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 lg:mb-6">
-                  Let's Connect
-                </h3>
-                <p className="text-muted mb-4 sm:mb-6 lg:mb-8 leading-relaxed text-xs sm:text-sm lg:text-base">
-                  I'm always open to discussing new opportunities, interesting
-                  projects, or just having a chat about technology and
-                  development. Choose your preferred way to reach out!
-                </p>
-
-                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 bg-surface/30 border border-glass-border rounded-lg hover:border-primary/50 hover:bg-surface/50 transition-all group"
-                    >
-                      <div className="text-muted group-hover:text-primary transition-colors flex-shrink-0">
-                        <Icon
-                          name={link.icon}
-                          className="group-hover:scale-110 transition-transform"
-                          size={18}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-medium block text-xs sm:text-sm lg:text-base truncate">
-                          {link.name}
-                        </span>
-                        <span className="text-xs sm:text-sm text-muted block truncate">
-                          {link.description}
-                        </span>
-                      </div>
-                      <Icon
-                        name="external-link"
-                        className="ml-auto group-hover:translate-x-1 transition-transform text-muted group-hover:text-primary flex-shrink-0"
-                        size={12}
-                      />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div
+          className={`mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 reveal ${inClass}`}
+          style={{ transitionDelay: '450ms' }}
+        >
+          {socials.map(social => (
+            <a
+              key={social.name}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-sweep text-sm text-muted transition-colors hover:text-foreground"
+            >
+              {social.name} ↗
+            </a>
+          ))}
         </div>
       </div>
     </section>

@@ -1,312 +1,159 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import Icon from '@/components/ui/Icon';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '@/components/Footer';
+import ScrollFx from '@/components/ScrollFx';
+import ScrambleText from '@/components/ScrambleText';
 import { projects, getProjectsByCategory, categories } from '@/data/projects';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
-const ProjectsPage = () => {
+const categoryLabel: Record<string, string> = {
+  all: 'All',
+  fullstack: 'Full-stack',
+  frontend: 'Frontend',
+  backend: 'Backend',
+};
+
+const AllProjects = () => {
+  usePageTitle('All Projects · Al-Baraa Mansour');
   const [filter, setFilter] = useState('all');
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const progress = Math.min(window.scrollY / 100, 1);
-      setScrollProgress(progress);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const filteredProjects = getProjectsByCategory(filter);
-
-  const handleFilterChange = useCallback((newFilter: string) => {
-    setFilter(newFilter);
-  }, []);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'text-green-400 border-green-400';
-      case 'in-progress':
-        return 'text-yellow-400 border-yellow-400';
-      case 'planning':
-        return 'text-blue-400 border-blue-400';
-      default:
-        return 'text-muted border-muted';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'Completed';
-      case 'in-progress':
-        return 'In Progress';
-      case 'planning':
-        return 'Planning';
-      default:
-        return 'Unknown';
-    }
-  };
-
-  const handleGoBack = useCallback(() => {
-    window.location.href = '/';
-  }, []);
-
-  const headerHeight = 80 - scrollProgress * 20;
-  const logoSize = 40 - scrollProgress * 8;
-  const headerBgOpacity = scrollProgress * 0.85;
-  const headerBlur = scrollProgress * 20;
+  const filtered = getProjectsByCategory(filter);
+  const { ref, visible } = useScrollReveal();
+  const inClass = visible ? 'is-in' : '';
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header - same as before */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-fade-in"
-        style={{
-          height: `${headerHeight}px`,
-          backgroundColor: `rgba(9, 10, 34, ${headerBgOpacity})`,
-          backdropFilter: `blur(${headerBlur}px)`,
-          borderBottom:
-            scrollProgress > 0.5
-              ? '1px solid rgba(255, 255, 255, 0.1)'
-              : '1px solid transparent',
-          boxShadow:
-            scrollProgress > 0.5
-              ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-              : 'none',
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6 h-full">
-          <div className="flex items-center justify-between h-full">
-            {/* Back Button */}
-            <div className="animate-slide-left delay-200">
-              <Button
-                variant="ghost"
-                onClick={handleGoBack}
-                className="group flex items-center gap-2 hover:bg-surface/50 transition-all duration-200 border border-glass hover:border-glass-border/50"
-              >
-                <Icon
-                  name="arrow-left"
-                  className="group-hover:-translate-x-1 transition-transform duration-200"
-                  size={18}
-                />
-                <span className="hidden sm:inline font-medium">
-                  Back to Home
-                </span>
-                <span className="sm:hidden font-medium">Back</span>
-              </Button>
-            </div>
-
-            {/* Logo */}
-            <div className="flex items-center animate-slide-right delay-300">
-              <img
-                src="/myLogoGold.svg"
-                alt="Logo"
-                className="object-contain transition-all duration-300"
-                style={{
-                  width: `${logoSize}px`,
-                  height: `${logoSize}px`,
-                }}
-                loading="eager"
-              />
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen">
+      <ScrollFx />
+      <header className="container-page flex h-20 items-center justify-between">
+        <Link
+          to="/"
+          className="link-sweep flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
+        >
+          <span aria-hidden>←</span> Back home
+        </Link>
+        <img src="/myLogoGold.svg" alt="Al-Baraa Mansour" width={26} height={26} />
       </header>
 
-      <main style={{ paddingTop: '80px' }}>
-        <section className="py-8 sm:py-12 lg:py-16 relative overflow-hidden">
-          <div className="container mx-auto px-4 sm:px-6 relative z-10">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 animate-slide-up delay-200">
-                My <span className="gradient-text">Projects</span>
-              </h2>
-              <p className="text-base sm:text-lg lg:text-xl text-muted max-w-2xl mx-auto mb-6 sm:mb-8 px-4 animate-slide-up delay-300">
-                A collection of projects showcasing my skills in web development
-                and software engineering. Each project represents a unique
-                challenge and learning experience.
-              </p>
-              <div className="w-16 sm:w-24 h-1 bg-gradient-accent mx-auto rounded-full animate-fade-in delay-500" />
-            </div>
+      <main className="container-page pb-16">
+        <section ref={ref as React.RefObject<HTMLElement>} className="pt-10 md:pt-16">
+          <ScrambleText
+            text="The archive"
+            active={visible}
+            className={`text-label reveal ${inClass}`}
+          />
+          <h1
+            className={`font-display mt-4 text-[clamp(2.4rem,6vw,4.2rem)] reveal ${inClass}`}
+            style={{ transitionDelay: '90ms' }}
+          >
+            All <em className="accent-italic">{projects.length}</em> projects.
+          </h1>
+          <p
+            className={`mt-5 max-w-xl text-lg leading-relaxed text-muted reveal ${inClass}`}
+            style={{ transitionDelay: '180ms' }}
+          >
+            Client work, side projects, and experiments. Each one taught me
+            something new.
+          </p>
+
+          {/* Filters */}
+          <div
+            className={`mt-10 flex flex-wrap gap-x-7 gap-y-2 border-b hairline pb-4 reveal ${inClass}`}
+            style={{ transitionDelay: '270ms' }}
+          >
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => setFilter(category)}
+                className={`font-mono text-xs uppercase tracking-[0.18em] transition-colors ${
+                  filter === category
+                    ? 'text-gold'
+                    : 'text-muted/70 hover:text-foreground'
+                }`}
+                aria-pressed={filter === category}
+              >
+                {categoryLabel[category] ?? category}
+                {filter === category && <span className="ml-1.5">✦</span>}
+              </button>
+            ))}
           </div>
         </section>
 
-        {/* Projects Section - Using centralized data */}
-        <section className="py-8 sm:py-12 lg:py-16">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-8 sm:mb-12">
-              {/* Filter Buttons */}
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-                {categories.map((category, index) => (
-                  <div
-                    key={category}
-                    className="animate-slide-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <Button
-                      variant={filter === category ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => handleFilterChange(category)}
-                      className={`capitalize text-xs sm:text-sm transition-all duration-200 ${
-                        filter === category
-                          ? 'bg-gradient-accent hover:bg-gradient-accent/90 shadow-lg shadow-primary/20'
-                          : 'hover:border-primary/50'
+        {/* Grid */}
+        <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map(project => (
+            <article
+              key={project.id}
+              className="card-raise flex flex-col overflow-hidden rounded-xl border hairline bg-surface/25"
+            >
+              <div className="img-frame aspect-[16/10] rounded-none border-0">
+                <img
+                  src={project.image}
+                  alt={`Screenshot of ${project.title}`}
+                  width={1200}
+                  height={750}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 className="font-display text-xl">{project.title}</h2>
+                  <span className="flex shrink-0 items-center gap-1.5 text-[0.68rem] uppercase tracking-wider text-muted">
+                    <span
+                      className={`inline-block h-1.5 w-1.5 rounded-full ${
+                        project.status === 'completed'
+                          ? 'bg-emerald-400'
+                          : 'bg-gold'
                       }`}
-                    >
-                      {category === 'all' ? 'All' : category}
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Projects Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
-              {filteredProjects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="group animate-slide-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="glass-card h-full flex flex-col overflow-hidden group-hover:shadow-xl group-hover:shadow-primary/10 transition-all duration-500">
-                    {/* Project Image */}
-                    <div className="relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full aspect-[4/3] rounded-lg object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-
-                      {/* Category Badge */}
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2 py-1 text-xs bg-surface/80 backdrop-blur-sm text-foreground rounded-full border border-glass-border capitalize">
-                          {project.category}
-                        </span>
-                      </div>
-
-                      {/* Featured Badge */}
-                      {project.featured && (
-                        <div className="absolute top-3 right-3">
-                          <span className="px-2 py-1 text-xs bg-gradient-accent text-primary-foreground rounded-full font-medium">
-                            Featured
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Project Content */}
-                    <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="text-lg sm:text-xl font-bold gradient-text flex-1 pr-2">
-                          {project.title}
-                        </h3>
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full border flex-shrink-0 ${getStatusColor(
-                            project.status
-                          )}`}
-                        >
-                          {getStatusText(project.status)}
-                        </span>
-                      </div>
-
-                      <p className="text-muted text-sm mb-4 flex-1 leading-relaxed">
-                        {project.description}
-                      </p>
-
-                      {/* Technologies */}
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.technologies.map(tech => (
-                          <span
-                            key={tech}
-                            className="px-2 py-1 text-xs bg-surface/50 text-foreground rounded-full border border-glass-border hover:border-primary/50 transition-colors"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Project Links */}
-                      <div className="flex gap-3">
-                        {/* Conditionally render Code button only for non-private projects */}
-                        {!project.private && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            asChild
-                            className="flex-1 group"
-                          >
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2"
-                            >
-                              <Icon
-                                name="github"
-                                className="group-hover:scale-110 transition-transform"
-                                size={16}
-                              />
-                              <span className="hidden sm:inline">Code</span>
-                              <span className="sm:hidden">Code</span>
-                            </a>
-                          </Button>
-                        )}
-
-                        {project.live !== '#' && (
-                          <Button
-                            variant="default"
-                            size="sm"
-                            asChild
-                            className={`${
-                              project.private ? 'flex-1' : 'flex-1'
-                            } bg-gradient-accent hover:bg-gradient-accent/90 group relative`}
-                          >
-                            <a
-                              href={project.live}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2"
-                            >
-                              {project.private && (
-                                <Icon
-                                  name="lock"
-                                  className="opacity-70"
-                                  size={14}
-                                />
-                              )}
-                              <Icon
-                                name="external-link"
-                                className="group-hover:scale-110 transition-transform"
-                                size={16}
-                              />
-                              <span className="hidden sm:inline">
-                                Live Demo
-                              </span>
-                              <span className="sm:hidden">Demo</span>
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    />
+                    {project.status === 'in-progress' ? 'Building' : 'Shipped'}
+                  </span>
                 </div>
-              ))}
-            </div>
 
-            {filteredProjects.length === 0 && (
-              <div className="text-center py-16 animate-fade-in">
-                <p className="text-muted text-lg">
-                  No projects found in this category.
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                  {project.description}
                 </p>
+
+                <p className="mt-4 font-mono text-[0.68rem] tracking-wide text-muted/60">
+                  {project.technologies.join(' / ')}
+                </p>
+
+                <div className="mt-4 flex items-center gap-5 border-t hairline pt-4 text-sm">
+                  {project.live !== '#' ? (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-underlined font-medium"
+                    >
+                      Visit live ↗
+                    </a>
+                  ) : (
+                    <span className="text-muted/50">In the workshop</span>
+                  )}
+                  {!project.private && project.github !== '#' && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-sweep text-muted transition-colors hover:text-foreground"
+                    >
+                      Source ↗
+                    </a>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
+            </article>
+          ))}
         </section>
+
+        {filtered.length === 0 && (
+          <p className="py-16 text-center text-muted">
+            Nothing in this category yet.
+          </p>
+        )}
       </main>
 
       <Footer />
@@ -314,4 +161,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default AllProjects;

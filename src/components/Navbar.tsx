@@ -1,245 +1,159 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from '@/components/ui/sheet';
+import { useState, useEffect, useCallback } from 'react';
+
+const sections = [
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Work' },
+  { id: 'contact', label: 'Contact' },
+];
 
 const Navbar = () => {
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const sections = useMemo(
-    () => [
-      { id: 'hero', label: 'Home' },
-      { id: 'about', label: 'About' },
-      { id: 'projects', label: 'Projects' },
-      { id: 'contact', label: 'Contact' },
-    ],
-    []
-  );
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-10% 0px -10% 0px',
-      threshold: 0.3,
-    };
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, observerOptions);
-
-    const elements = sections.map(section =>
-      document.getElementById(section.id)
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: '-35% 0px -55% 0px' }
     );
 
-    elements.forEach(el => {
-      if (el) observer.observe(el);
-    });
+    const observed = ['hero', ...sections.map(s => s.id)]
+      .map(id => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+    observed.forEach(el => observer.observe(el));
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 12);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      elements.forEach(el => {
-        if (el) observer.unobserve(el);
-      });
+      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [sections]);
+  }, []);
 
-  const scrollToSection = useCallback((sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navHeight = document.getElementById('site-nav')?.offsetHeight ?? 96;
-      const targetY =
-        element.getBoundingClientRect().top + window.scrollY - navHeight - 8;
-      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-    }
+  // Lock page scroll while the mobile menu is open
+  useEffect(() => {
+    document.documentElement.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [menuOpen]);
+
+  const goTo = useCallback((id: string) => {
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
   return (
-    <nav
-      id="site-nav"
-      className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none transition-all duration-300 animate-fade-in"
-      style={{ animationDelay: '0.1s', animationFillMode: 'both' }}
-    >
-      <div className="pointer-events-auto w-full max-w-6xl px-4">
-        <div
-          className={`rounded-2xl md:rounded-full px-3 md:px-4 py-2.5 md:py-3 flex items-center gap-3 transition-[background-color,transform,backdrop-filter,box-shadow,border-color] duration-300 ${
-            isScrolled
-              ? 'bg-[rgba(9,10,34,0.82)] border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl'
-              : 'bg-transparent border border-transparent shadow-none backdrop-blur-0'
-          }`}
-        >
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+          isScrolled && !menuOpen
+            ? 'bg-[hsl(var(--background)/0.92)] border-b hairline'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
+        <nav className="container-page flex h-16 items-center justify-between">
           <button
-            className="flex items-center gap-3 rounded-full px-2 py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))] focus:ring-opacity-70 focus:ring-offset-transparent"
-            onClick={() => scrollToSection('hero')}
-            aria-label="Go to top"
+            onClick={() => goTo('hero')}
+            className="flex items-center gap-3 group"
+            aria-label="Back to top"
           >
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
-              <img
-                src="/myLogoGold.svg"
-                alt="Al-Baraa Logo"
-                className="h-6 w-6"
-              />
-            </span>
-            <span className="text-sm font-semibold tracking-tight text-foreground hidden sm:inline">
+            <img
+              src="/myLogoGold.svg"
+              alt=""
+              width={18}
+              height={18}
+              className="transition-transform duration-300 group-hover:rotate-12"
+            />
+            <span className="text-sm font-medium tracking-tight hidden sm:inline">
               Al-Baraa Mansour
             </span>
           </button>
 
-          <div className="hidden md:flex flex-1 items-center justify-center gap-1">
-            {sections
-              .filter(section => section.id !== 'contact')
-              .map(section => {
-                const isActive = activeSection === section.id;
-                return (
-                  <Button
-                    key={section.id}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => scrollToSection(section.id)}
-                    className={`relative px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-                      isActive
-                        ? 'text-foreground bg-[rgba(255,229,161,0.12)] shadow-[0_0_0_1px_rgba(255,229,161,0.35)]'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
-                    }`}
-                    data-active={isActive}
-                  >
-                    {isActive && (
-                      <span
-                        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,229,161,0.25),transparent_60%)]"
-                        aria-hidden
-                      />
-                    )}
-                    <span className="relative">{section.label}</span>
-                  </Button>
-                );
-              })}
-          </div>
-
-          <div className="hidden md:flex items-center ml-auto">
-            {(() => {
-              const isContactActive = activeSection === 'contact';
-              return (
-                <Button
-                  size="sm"
-                  onClick={() => scrollToSection('contact')}
-                  className={`rounded-full px-5 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] transition transform hover:-translate-y-[1px] ${
-                    isContactActive
-                      ? 'shadow-[0_0_0_1px_rgba(255,229,161,0.6),0_10px_30px_rgba(255,229,161,0.45)]'
-                      : 'shadow-lg shadow-[rgba(255,229,161,0.28)] hover:shadow-[rgba(255,229,161,0.4)]'
-                  }`}
-                  style={{ background: 'var(--gradient-accent)' }}
-                  data-active={isContactActive}
-                >
-                  Contact
-                </Button>
-              );
-            })()}
-          </div>
-
-          <div className="md:hidden ml-auto">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full border border-white/10 hover:bg-white/10"
-                  aria-label="Open menu"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[260px] sm:w-[320px] bg-[hsl(var(--surface))] border-l border-white/10 text-foreground"
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            {sections.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => goTo(id)}
+                className={`link-sweep text-sm transition-colors duration-200 ${
+                  activeSection === id
+                    ? 'text-gold'
+                    : 'text-muted hover:text-foreground'
+                }`}
               >
-                <div className="pt-6 pb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-inner">
-                      <img
-                        src="/myLogoGold.svg"
-                        alt="Al-Baraa Logo"
-                        className="h-6 w-6"
-                      />
-                    </span>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-foreground">
-                        Navigation
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        Jump to a section
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-3">
-                  {sections.map(section => {
-                    const isActive = activeSection === section.id;
-                    const isContact = section.id === 'contact';
-                    return (
-                      <SheetClose asChild key={section.id}>
-                        <Button
-                          variant="ghost"
-                          size="lg"
-                          onClick={() => scrollToSection(section.id)}
-                          className={`w-full justify-start rounded-xl text-base ${
-                            isContact
-                              ? 'text-[hsl(var(--primary-foreground))] shadow-[rgba(255,229,161,0.28)_0_8px_24px] hover:shadow-[rgba(255,229,161,0.4)_0_10px_32px]'
-                              : ''
-                          } ${
-                            isActive
-                              ? isContact
-                                ? 'shadow-[0_0_0_1px_rgba(255,229,161,0.5),0_10px_30px_rgba(255,229,161,0.45)]'
-                                : 'text-foreground bg-[rgba(255,229,161,0.12)] shadow-[0_0_0_1px_rgba(255,229,161,0.35)]'
-                              : isContact
-                              ? 'text-muted-foreground'
-                              : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
-                          }`}
-                          style={
-                            isContact
-                              ? { background: 'var(--gradient-accent)' }
-                              : undefined
-                          }
-                          data-active={isActive}
-                        >
-                          {section.label}
-                        </Button>
-                      </SheetClose>
-                    );
-                  })}
-                </div>
-              </SheetContent>
-            </Sheet>
+                {label}
+              </button>
+            ))}
+            <a
+              href="mailto:baraadev0@gmail.com"
+              className="text-sm font-medium text-primary-foreground bg-gold rounded-full px-4 py-1.5 transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              Let's talk
+            </a>
           </div>
+
+          {/* Mobile toggle */}
+          <button
+            className="md:hidden relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+            onClick={() => setMenuOpen(open => !open)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span
+              className={`block h-px w-6 bg-foreground transition-transform duration-300 ${
+                menuOpen ? 'translate-y-[3.5px] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`block h-px w-6 bg-foreground transition-transform duration-300 ${
+                menuOpen ? '-translate-y-[3.5px] -rotate-45' : ''
+              }`}
+            />
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile menu: plain fixed overlay, transform/opacity only */}
+      <div
+        className={`fixed inset-0 z-40 bg-background md:hidden transition-opacity duration-300 ${
+          menuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        aria-hidden={!menuOpen}
+      >
+        <div className="flex h-full flex-col items-start justify-center gap-2 px-8">
+          {sections.map(({ id, label }, i) => (
+            <button
+              key={id}
+              onClick={() => goTo(id)}
+              tabIndex={menuOpen ? 0 : -1}
+              className={`font-display text-5xl py-2 transition-[opacity,transform] duration-500 ${
+                activeSection === id ? 'text-gold' : 'text-foreground'
+              } ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}
+              style={{ transitionDelay: menuOpen ? `${100 + i * 70}ms` : '0ms' }}
+            >
+              {label}
+            </button>
+          ))}
+          <a
+            href="mailto:baraadev0@gmail.com"
+            tabIndex={menuOpen ? 0 : -1}
+            className={`text-label mt-8 transition-[opacity,transform] duration-500 ${
+              menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
+            style={{ transitionDelay: menuOpen ? '340ms' : '0ms' }}
+          >
+            baraadev0@gmail.com ↗
+          </a>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
