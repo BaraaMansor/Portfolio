@@ -61,7 +61,7 @@ const About = () => {
 
         <div className="mt-10 grid gap-10 md:grid-cols-12">
           <div
-            className={`space-y-5 text-lg leading-relaxed text-muted md:col-span-7 reveal ${inClass}`}
+            className={`min-w-0 space-y-5 text-lg leading-relaxed text-muted md:col-span-7 reveal ${inClass}`}
             style={{ transitionDelay: '180ms' }}
           >
             <p className="text-foreground">
@@ -82,7 +82,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="md:col-span-5">
+          <div className="min-w-0 md:col-span-5">
             {skillGroups.map((group, i) => (
               <div
                 key={group.category}
@@ -95,7 +95,7 @@ const About = () => {
                     <span key={tech}>
                       {tech}
                       {j < group.technologies.length - 1 && (
-                        <span className="mx-2 text-gold/40">·</span>
+                        <span className="text-gold/40">{'  ·  '}</span>
                       )}
                     </span>
                   ))}
